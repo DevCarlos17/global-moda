@@ -12,7 +12,7 @@ async function fetchInventoryProducts(): Promise<InventoryProduct[]> {
     )
     .order('name', { ascending: true })
   if (error) throw error
-  return ((data ?? []) as {
+  return ((data ?? []) as unknown as {
     id: string
     sku: string
     name: string

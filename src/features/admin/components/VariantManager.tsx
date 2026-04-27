@@ -34,7 +34,7 @@ const MODE_TABS: { id: VariantMode; label: string }[] = [
 export type LocalVariantDraft = {
   id: string // temporary ID, e.g. crypto.randomUUID()
   label: string
-  attributes: Record<string, unknown>
+  attributes: Record<string, string>
   stock_quantity: number
   price_override: number | null
   is_active: boolean
@@ -61,8 +61,8 @@ export function VariantManager({
 }: VariantManagerProps) {
   const queryClient = useQueryClient()
   const { data: dbVariants = [] } = useProductVariants(localMode ? undefined : productId)
-  const { mutate: updateVariant, isPending: isUpdating } = useUpdateVariant(productId)
-  const { mutate: deleteVariant } = useDeleteVariant(productId)
+  const { mutate: updateVariant, isPending: isUpdating } = useUpdateVariant(productId ?? '')
+  const { mutate: deleteVariant } = useDeleteVariant(productId ?? '')
 
   // Unified display list
   const displayVariants: Array<Pick<ProductVariant, 'id' | 'label' | 'stock_quantity' | 'price_override'>> =
@@ -107,7 +107,7 @@ export function VariantManager({
 
   const makeDraft = (
     label: string,
-    attributes: Record<string, unknown>,
+    attributes: Record<string, string>,
     stock_quantity: number,
     price_override: number | null,
     order: number,
@@ -125,7 +125,7 @@ export function VariantManager({
 
   type VariantPayload = {
     label: string
-    attributes: Record<string, unknown>
+    attributes: Record<string, string>
     stock_quantity: number
     price_override: number | null
     is_active: boolean
@@ -436,7 +436,7 @@ export function VariantManager({
             </div>
             <div className="flex items-center justify-between gap-4">
               <p className="text-xs text-white/25">
-                Precio vacío → base ({formatCurrency(productPrice)})
+                Precio vacío → base ({formatCurrency(Number(productPrice))})
               </p>
               <Button
                 type="submit"

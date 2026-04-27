@@ -96,6 +96,7 @@ export function ContainerFormModal({ container, isOpen, onClose }: ContainerForm
       actual_arrival: form.actual_arrival || null,
       status: form.status,
       notes: form.notes.trim() || null,
+      total_cost: 0,
       order_window_open: form.order_window_open,
       order_deadline: form.order_deadline || null,
     }
