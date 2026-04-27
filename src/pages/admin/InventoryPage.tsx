@@ -1,3 +1,4 @@
+// Inventory
 import { useState } from 'react'
 import { AlertTriangle } from 'lucide-react'
 import { useInventoryProducts } from '@/features/inventory/hooks/useInventory'
