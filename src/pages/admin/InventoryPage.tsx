@@ -143,7 +143,7 @@ const COLUMNS: Column<InventoryProduct>[] = [
   {
     key: 'actions',
     header: '',
-    render: (p) => (
+    render: () => (
       <span className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
         Ajustar stock →
       </span>
