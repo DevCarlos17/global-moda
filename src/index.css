@@ -1,0 +1,137 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@theme {
+  /* Brand Colors */
+  --color-black: #0A0A0A;
+  --color-white: #FAFAFA;
+  --color-gold: #C8A951;
+  --color-gold-light: #D4B96A;
+  --color-gold-dark: #A68C3F;
+  --color-gold-50: #FBF5E6;
+  --color-gold-100: #F5E9C5;
+  --color-gold-200: #EBD48A;
+  --color-gold-300: #E0BE60;
+  --color-gold-400: #D4AB3D;
+  --color-gold-500: #C8A951;
+  --color-gold-600: #A68C3F;
+  --color-gold-700: #856F2F;
+  --color-gold-800: #645320;
+  --color-gold-900: #433614;
+
+  /* Surface — card/panel background, slightly offset from body */
+  --color-surface: #141414;
+
+  /* Status Colors */
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+  --color-info: #3B82F6;
+
+  /* Typography */
+  --font-family-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Shadows */
+  --shadow-luxury: 0 4px 24px rgba(0, 0, 0, 0.12);
+  --shadow-luxury-lg: 0 8px 40px rgba(0, 0, 0, 0.20);
+  --shadow-gold: 0 4px 16px rgba(200, 169, 81, 0.24);
+}
+
+/* ============================================================
+   LIGHT MODE — overrides Tailwind CSS variables
+   bg-black  → light bg    | text-white → dark text
+   border-white/10 → dark border at 10% opacity (auto)
+   ============================================================ */
+html.light {
+  --color-black: #F5F3EF;
+  --color-white: #111111;
+  --color-surface: #E8E5E0;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-black);
+    color: var(--color-white);
+    min-height: 100dvh;
+  }
+
+  #root {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  /* Remove number input spinners */
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='number'] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+}
+
+/* Select option — use CSS variables so dropdown items follow the theme */
+select option {
+  background-color: var(--color-surface);
+  color: var(--color-white);
+}
+
+/* Input fields — white/5 bg becomes visible on light bg */
+html.light input,
+html.light select,
+html.light textarea {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  color: #111111 !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Sonner toast in light mode */
+html.light [data-sonner-toast] {
+  background: #FFFFFF !important;
+  color: #111111 !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
