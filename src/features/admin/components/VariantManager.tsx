@@ -107,7 +107,7 @@ export function VariantManager({
 
   const makeDraft = (
     label: string,
-    attributes: Record<string, unknown>,
+    attributes: Record<string, string>,
     stock_quantity: number,
     price_override: number | null,
     order: number,
