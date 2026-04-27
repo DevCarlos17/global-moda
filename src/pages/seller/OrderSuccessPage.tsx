@@ -33,21 +33,21 @@ export function OrderSuccessPage() {
         <CheckCircle size={64} />
       </div>
 
-      <h1 className="text-2xl font-semibold text-white mb-2 text-center">¡Pedido creado!</h1>
+      <h1 className="text-2xl font-semibold text-gray-900 mb-2 text-center">¡Pedido creado!</h1>
 
       {state?.orderNumber && (
         <>
-          <p className="text-sm text-white/50 mb-1">Número de pedido</p>
-          <p className="text-gold font-bold text-lg mb-4">{state.orderNumber}</p>
+          <p className="text-sm text-gray-400 mb-1">Número de pedido</p>
+          <p className="text-gray-900 font-bold text-lg mb-4">{state.orderNumber}</p>
         </>
       )}
 
       {adminPhone ? (
-        <p className="text-white/50 text-sm text-center mb-6">
+        <p className="text-gray-400 text-sm text-center mb-6">
           Revisá el mensaje y enviáselo al administrador por WhatsApp para confirmar el stock.
         </p>
       ) : (
-        <p className="text-white/50 text-sm text-center mb-6">
+        <p className="text-gray-400 text-sm text-center mb-6">
           Tu pedido fue registrado. El administrador te contactará para confirmarlo.
         </p>
       )}
@@ -55,15 +55,15 @@ export function OrderSuccessPage() {
       {/* Message preview */}
       {adminPhone && (
         <div className="w-full mb-6">
-          <p className="text-xs text-white/40 uppercase tracking-wider font-medium mb-2">
+          <p className="text-xs text-gray-400 uppercase tracking-wider font-medium mb-2">
             Vista previa del mensaje
           </p>
           {isLoading ? (
-            <div className="flex items-center justify-center h-24 rounded-xl border border-white/10 bg-white/5">
+            <div className="flex items-center justify-center h-24 rounded-xl border border-gray-200 bg-gray-50">
               <Loader size="sm" />
             </div>
           ) : messagePreview ? (
-            <pre className="w-full rounded-xl border border-white/10 bg-white/[0.04] p-4 text-xs text-white/70 leading-relaxed whitespace-pre-wrap break-words font-sans max-h-64 overflow-y-auto">
+            <pre className="w-full rounded-xl border border-gray-200 bg-gray-50 p-4 text-xs text-gray-600 leading-relaxed whitespace-pre-wrap break-words font-sans max-h-64 overflow-y-auto">
               {messagePreview}
             </pre>
           ) : null}

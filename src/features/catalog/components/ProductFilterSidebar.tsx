@@ -41,41 +41,41 @@ export function ProductFilterSidebar({
   }
 
   return (
-    <aside className="hidden md:flex flex-col w-56 flex-shrink-0 border-r border-white/10 sticky top-16 h-[calc(100dvh-4rem)] overflow-y-auto scrollbar-hide">
+    <aside className="hidden md:flex flex-col w-56 flex-shrink-0 border-r border-gray-200 sticky top-16 h-[calc(100dvh-4rem)] overflow-y-auto scrollbar-hide bg-white">
 
-      {/* ── Header ─────────────────────────────── */}
-      <div className="flex items-center justify-between px-4 pt-5 pb-3 border-b border-white/[0.06]">
-        <span className="text-[9px] font-semibold text-white/25 uppercase tracking-widest">
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 pt-5 pb-3 border-b border-gray-100">
+        <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-widest">
           Filtros
         </span>
         {hasFilters && (
           <button
             onClick={clearAll}
-            className="text-[10px] text-white/40 hover:text-white transition-colors"
+            className="text-[10px] text-gray-400 hover:text-gray-700 transition-colors"
           >
             Limpiar todo
           </button>
         )}
       </div>
 
-      {/* ── Search ─────────────────────────────── */}
-      <div className="px-3 py-3 border-b border-white/[0.06]">
+      {/* Search */}
+      <div className="px-3 py-3 border-b border-gray-100">
         <div className="relative">
           <Search
             size={12}
-            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-white/25 pointer-events-none"
+            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
           />
           <input
             type="text"
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Producto o SKU..."
-            className="w-full h-8 pl-7 pr-7 rounded-lg border border-white/10 bg-white/5 text-xs text-white placeholder:text-white/25 focus:outline-none focus:border-white/30 transition-colors"
+            className="w-full h-8 pl-7 pr-7 rounded-lg border border-gray-200 bg-white text-xs text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-gray-400 transition-colors"
           />
           {search && (
             <button
               onClick={() => onSearchChange('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/70 transition-colors"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
               aria-label="Borrar búsqueda"
             >
               <X size={11} />
@@ -84,9 +84,9 @@ export function ProductFilterSidebar({
         </div>
       </div>
 
-      {/* ── Sort ───────────────────────────────── */}
-      <div className="px-3 py-3 border-b border-white/[0.06]">
-        <p className="text-[9px] font-semibold text-white/25 uppercase tracking-widest px-1 mb-2">
+      {/* Sort */}
+      <div className="px-3 py-3 border-b border-gray-100">
+        <p className="text-[9px] font-semibold text-gray-400 uppercase tracking-widest px-1 mb-2">
           Ordenar
         </p>
         <div className="flex flex-col gap-0.5">
@@ -97,18 +97,18 @@ export function ProductFilterSidebar({
               className={cn(
                 'flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-left transition-colors w-full',
                 sort === opt.value
-                  ? 'text-white bg-white/10'
-                  : 'text-white/40 hover:text-white hover:bg-white/5',
+                  ? 'text-gray-900 bg-gray-100'
+                  : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50',
               )}
             >
               <span
                 className={cn(
                   'size-3 rounded-full border flex-shrink-0 flex items-center justify-center',
-                  sort === opt.value ? 'border-white bg-white' : 'border-white/20',
+                  sort === opt.value ? 'border-gray-900 bg-gray-900' : 'border-gray-300',
                 )}
               >
                 {sort === opt.value && (
-                  <span className="size-1 rounded-full bg-black" />
+                  <span className="size-1 rounded-full bg-white" />
                 )}
               </span>
               {opt.label}
@@ -117,26 +117,26 @@ export function ProductFilterSidebar({
         </div>
       </div>
 
-      {/* ── Disponibilidad ─────────────────────── */}
-      <div className="px-3 py-3 border-b border-white/[0.06]">
-        <p className="text-[9px] font-semibold text-white/25 uppercase tracking-widest px-1 mb-2">
+      {/* Disponibilidad */}
+      <div className="px-3 py-3 border-b border-gray-100">
+        <p className="text-[9px] font-semibold text-gray-400 uppercase tracking-widest px-1 mb-2">
           Disponibilidad
         </p>
         <button
           onClick={() => onInStockOnlyChange(!inStockOnly)}
-          className="flex items-center gap-2 px-2 py-1.5 rounded-lg w-full text-left transition-colors hover:bg-white/5"
+          className="flex items-center gap-2 px-2 py-1.5 rounded-lg w-full text-left transition-colors hover:bg-gray-50"
         >
           <span
             className={cn(
               'size-3.5 rounded border flex-shrink-0 flex items-center justify-center transition-colors',
-              inStockOnly ? 'bg-white border-white' : 'border-white/25 bg-transparent',
+              inStockOnly ? 'bg-gray-900 border-gray-900' : 'border-gray-300 bg-transparent',
             )}
           >
             {inStockOnly && (
               <svg viewBox="0 0 8 6" width="8" height="6" fill="none">
                 <path
                   d="M1 3L3 5L7 1"
-                  stroke="#0A0A0A"
+                  stroke="#ffffff"
                   strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -144,15 +144,15 @@ export function ProductFilterSidebar({
               </svg>
             )}
           </span>
-          <span className={cn('text-xs', inStockOnly ? 'text-white' : 'text-white/40')}>
+          <span className={cn('text-xs', inStockOnly ? 'text-gray-900' : 'text-gray-500')}>
             Solo con stock
           </span>
         </button>
       </div>
 
-      {/* ── Categorías ─────────────────────────── */}
+      {/* Categorías */}
       <div className="px-3 py-3 flex-1">
-        <p className="text-[9px] font-semibold text-white/25 uppercase tracking-widest px-1 mb-2">
+        <p className="text-[9px] font-semibold text-gray-400 uppercase tracking-widest px-1 mb-2">
           Categorías
         </p>
         <button
@@ -160,17 +160,17 @@ export function ProductFilterSidebar({
           className={cn(
             'flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-left w-full transition-colors',
             selectedId === null
-              ? 'text-white bg-white/10'
-              : 'text-white/40 hover:text-white hover:bg-white/5',
+              ? 'text-gray-900 bg-gray-100'
+              : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50',
           )}
         >
           <span
             className={cn(
               'size-3 rounded-full border flex-shrink-0 flex items-center justify-center',
-              selectedId === null ? 'border-white bg-white' : 'border-white/20',
+              selectedId === null ? 'border-gray-900 bg-gray-900' : 'border-gray-300',
             )}
           >
-            {selectedId === null && <span className="size-1 rounded-full bg-black" />}
+            {selectedId === null && <span className="size-1 rounded-full bg-white" />}
           </span>
           Todos
         </button>

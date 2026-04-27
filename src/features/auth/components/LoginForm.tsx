@@ -18,12 +18,12 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
       <div className="text-center mb-2">
-        <h1 className="text-xl font-semibold text-white">Iniciar sesión</h1>
-        <p className="mt-1 text-sm text-white/40">Accede a tu cuenta para continuar</p>
+        <h1 className="text-xl font-semibold text-gray-900">Iniciar sesión</h1>
+        <p className="mt-1 text-sm text-gray-500">Accede a tu cuenta para continuar</p>
       </div>
 
       {error && (
-        <div className="bg-error/10 border border-error/20 rounded-lg px-4 py-3 text-sm text-error">
+        <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3 text-sm text-red-600">
           {error.message || 'Credenciales incorrectas'}
         </div>
       )}
@@ -50,7 +50,7 @@ export function LoginForm() {
           <button
             type="button"
             onClick={() => setShowPassword((v) => !v)}
-            className="text-white/30 hover:text-white/70 transition-colors"
+            className="text-gray-400 hover:text-gray-600 transition-colors"
             tabIndex={-1}
           >
             {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}

@@ -64,30 +64,30 @@ export function DataTable<T>({
         <div className="relative flex-1 min-w-[200px] max-w-xs">
           <Search
             size={14}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
           />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder={searchPlaceholder}
-            className="w-full h-9 pl-9 pr-3 rounded-lg border border-white/10 bg-white/5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-gold/50 transition-colors"
+            className="w-full h-9 pl-9 pr-3 rounded-lg border border-gray-200 bg-white text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-200 transition-colors"
           />
         </div>
         {filterSlot && <div className="flex items-center gap-2 flex-wrap">{filterSlot}</div>}
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-xl border border-white/10">
+      <div className="overflow-x-auto rounded-xl border border-gray-200">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-white/10 bg-white/[0.02]">
+            <tr className="border-b border-gray-200 bg-gray-50">
               {columns.map((col) => (
                 <th
                   key={col.key}
                   className={cn(
-                    'text-left py-3 px-4 text-xs text-white/40 uppercase tracking-wider font-medium whitespace-nowrap',
-                    col.sortField && 'cursor-pointer select-none hover:text-white/70 transition-colors',
+                    'text-left py-3 px-4 text-xs text-gray-500 uppercase tracking-wider font-medium whitespace-nowrap',
+                    col.sortField && 'cursor-pointer select-none hover:text-gray-700 transition-colors',
                     col.headerClassName,
                   )}
                   onClick={col.sortField ? () => onSort(col.sortField!) : undefined}
@@ -111,15 +111,14 @@ export function DataTable<T>({
                   key={getRowKey(item)}
                   onClick={onRowClick ? () => onRowClick(item) : undefined}
                   className={cn(
-                    'border-b border-white/[0.05] transition-colors',
-                    onRowClick && 'cursor-pointer hover:bg-white/[0.04]',
-                    !onRowClick && 'hover:bg-white/[0.02]',
+                    'border-b border-gray-100 transition-colors',
+                    onRowClick && 'cursor-pointer hover:bg-gray-50',
                   )}
                 >
                   {columns.map((col) => (
                     <td
                       key={col.key}
-                      className={cn('py-3 px-4', col.className)}
+                      className={cn('py-3 px-4 text-gray-700', col.className)}
                     >
                       {col.render
                         ? col.render(item)
@@ -160,12 +159,12 @@ function SortIcon({
   sortParams: SortParams | null
 }) {
   if (sortParams?.field !== field) {
-    return <ChevronsUpDown size={12} className="text-white/20" />
+    return <ChevronsUpDown size={12} className="text-gray-300" />
   }
   return sortParams.direction === 'asc' ? (
-    <ChevronUp size={12} className="text-gold" />
+    <ChevronUp size={12} className="text-gray-900" />
   ) : (
-    <ChevronDown size={12} className="text-gold" />
+    <ChevronDown size={12} className="text-gray-900" />
   )
 }
 
@@ -173,11 +172,11 @@ function SkeletonRows({ columns }: { columns: number }) {
   return (
     <>
       {Array.from({ length: 8 }).map((_, i) => (
-        <tr key={i} className="border-b border-white/[0.05]">
+        <tr key={i} className="border-b border-gray-100">
           {Array.from({ length: columns }).map((_, j) => (
             <td key={j} className="py-3 px-4">
               <div
-                className="h-4 rounded-md bg-white/10 animate-pulse"
+                className="h-4 rounded-md bg-gray-200 animate-pulse"
                 style={{ width: `${60 + Math.random() * 30}%` }}
               />
             </td>

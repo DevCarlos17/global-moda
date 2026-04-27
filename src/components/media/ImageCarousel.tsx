@@ -35,7 +35,7 @@ export function ImageCarousel({ images, alt, className }: ImageCarouselProps) {
     return (
       <div
         className={cn(
-          'aspect-[3/4] bg-white/5 rounded-2xl flex items-center justify-center text-white/20 text-sm',
+          'aspect-[3/4] bg-gray-100 rounded-2xl flex items-center justify-center text-gray-300 text-sm',
           className,
         )}
       >
@@ -46,7 +46,7 @@ export function ImageCarousel({ images, alt, className }: ImageCarouselProps) {
 
   if (count === 1) {
     return (
-      <div className={cn('aspect-[3/4] rounded-2xl overflow-hidden bg-white/5', className)}>
+      <div className={cn('aspect-[3/4] rounded-2xl overflow-hidden bg-gray-100', className)}>
         <img src={images[0]} alt={alt} className="size-full object-cover" />
       </div>
     )
@@ -54,7 +54,7 @@ export function ImageCarousel({ images, alt, className }: ImageCarouselProps) {
 
   return (
     <div
-      className={cn('relative aspect-[3/4] rounded-2xl overflow-hidden bg-white/5 select-none', className)}
+      className={cn('relative aspect-[3/4] rounded-2xl overflow-hidden bg-gray-100 select-none', className)}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -96,7 +96,7 @@ export function ImageCarousel({ images, alt, className }: ImageCarouselProps) {
             onClick={() => setCurrent(i)}
             className={cn(
               'rounded-full transition-all',
-              i === current ? 'bg-gold w-4 h-1.5' : 'bg-white/40 size-1.5',
+              i === current ? 'bg-gray-900 w-4 h-1.5' : 'bg-gray-300 size-1.5',
             )}
             aria-label={`Imagen ${i + 1}`}
           />

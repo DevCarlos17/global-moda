@@ -188,19 +188,19 @@ export function ContainerFormModal({ container, isOpen, onClose }: ContainerForm
 
         {/* Notes */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-white/80">Notas</label>
+          <label className="text-sm font-medium text-gray-700">Notas</label>
           <textarea
             value={form.notes}
             onChange={(e) => set('notes', e.target.value)}
             rows={2}
             placeholder="Observaciones adicionales..."
-            className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:ring-1 focus:border-white/40 focus:ring-white/15 transition-colors resize-none"
+            className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:border-gray-400 focus:ring-gray-200 transition-colors resize-none"
           />
         </div>
 
         {/* Order Window Section */}
-        <div className="border border-white/10 rounded-xl p-4 flex flex-col gap-3">
-          <p className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">
+        <div className="border border-gray-200 rounded-xl p-4 flex flex-col gap-3">
+          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">
             Ventana de Pedidos
           </p>
 
@@ -208,7 +208,7 @@ export function ContainerFormModal({ container, isOpen, onClose }: ContainerForm
             <div
               onClick={() => set('order_window_open', !form.order_window_open)}
               className={`relative w-10 h-5 rounded-full transition-colors ${
-                form.order_window_open ? 'bg-success' : 'bg-white/15'
+                form.order_window_open ? 'bg-success' : 'bg-gray-200'
               }`}
             >
               <span
@@ -217,7 +217,7 @@ export function ContainerFormModal({ container, isOpen, onClose }: ContainerForm
                 }`}
               />
             </div>
-            <span className="text-sm text-white/70">
+            <span className="text-sm text-gray-600">
               {form.order_window_open ? 'Ventana abierta' : 'Ventana cerrada'}
             </span>
           </label>

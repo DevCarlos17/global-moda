@@ -30,31 +30,31 @@ function TreeNode({ category, depth = 0 }: TreeNodeProps) {
         {hasChildren ? (
           <Folder
             size={14}
-            className={depth === 0 ? 'text-gold flex-shrink-0' : 'text-white/35 flex-shrink-0'}
+            className={depth === 0 ? 'text-gray-500 flex-shrink-0' : 'text-gray-400 flex-shrink-0'}
           />
         ) : (
-          <Tag size={12} className="text-white/25 flex-shrink-0" />
+          <Tag size={12} className="text-gray-400 flex-shrink-0" />
         )}
 
         <span
           className={
             depth === 0
-              ? 'text-sm font-medium text-white truncate flex-1'
-              : 'text-sm text-white/60 truncate flex-1'
+              ? 'text-sm font-medium text-gray-900 truncate flex-1'
+              : 'text-sm text-gray-500 truncate flex-1'
           }
         >
           {category.name}
         </span>
 
         {hasChildren && (
-          <span className="text-[11px] text-white/25 tabular-nums flex-shrink-0">
+          <span className="text-[11px] text-gray-400 tabular-nums flex-shrink-0">
             {category.children.length}
           </span>
         )}
       </div>
 
       {hasChildren && (
-        <div className="ml-[26px] border-l border-white/10 pl-2.5 flex flex-col gap-0.5 mb-1">
+        <div className="ml-[26px] border-l border-gray-200 pl-2.5 flex flex-col gap-0.5 mb-1">
           {category.children.map((child) => (
             <TreeNode key={child.id} category={child} depth={depth + 1} />
           ))}
@@ -74,33 +74,33 @@ export function CategoryTreePreview() {
   const subCount = totalCount - rootCount
 
   return (
-    <div className="bg-surface border border-white/10 rounded-2xl p-5 flex flex-col gap-4 sticky top-24">
+    <div className="bg-white border border-gray-200 rounded-2xl p-5 flex flex-col gap-4 sticky top-24">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <GitBranch size={15} className="text-gold" />
-          <h2 className="text-sm font-semibold text-white">Árbol de categorías</h2>
+          <GitBranch size={15} className="text-gray-500" />
+          <h2 className="text-sm font-semibold text-gray-900">Árbol de categorías</h2>
         </div>
         {totalCount > 0 && (
-          <span className="text-xs text-white/30">{totalCount} total</span>
+          <span className="text-xs text-gray-400">{totalCount} total</span>
         )}
       </div>
 
       {/* Stats */}
       {totalCount > 0 && (
         <div className="grid grid-cols-2 gap-2">
-          <div className="bg-white/5 rounded-xl p-3 text-center">
-            <p className="text-2xl font-bold text-white">{rootCount}</p>
-            <p className="text-[11px] text-white/40 mt-0.5">principales</p>
+          <div className="bg-gray-50 rounded-xl p-3 text-center">
+            <p className="text-2xl font-bold text-gray-900">{rootCount}</p>
+            <p className="text-[11px] text-gray-400 mt-0.5">principales</p>
           </div>
-          <div className="bg-white/5 rounded-xl p-3 text-center">
-            <p className="text-2xl font-bold text-white">{subCount}</p>
-            <p className="text-[11px] text-white/40 mt-0.5">subcategorías</p>
+          <div className="bg-gray-50 rounded-xl p-3 text-center">
+            <p className="text-2xl font-bold text-gray-900">{subCount}</p>
+            <p className="text-[11px] text-gray-400 mt-0.5">subcategorías</p>
           </div>
         </div>
       )}
 
-      {totalCount > 0 && <div className="border-t border-white/10" />}
+      {totalCount > 0 && <div className="border-t border-gray-200" />}
 
       {/* Tree */}
       {tree.length === 0 ? (

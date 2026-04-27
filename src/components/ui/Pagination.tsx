@@ -21,8 +21,8 @@ export function Pagination({
   const pages = getPageNumbers(currentPage, totalPages)
 
   return (
-    <div className="flex items-center justify-between gap-4 pt-4 border-t border-white/10">
-      <p className="text-xs text-white/40">
+    <div className="flex items-center justify-between gap-4 pt-4 border-t border-gray-200">
+      <p className="text-xs text-gray-400">
         Mostrando {totalItems === 0 ? 0 : startIndex}–{endIndex} de {totalItems}
       </p>
 
@@ -31,7 +31,7 @@ export function Pagination({
           <button
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             aria-label="Página anterior"
           >
             <ChevronLeft size={14} />
@@ -39,7 +39,7 @@ export function Pagination({
 
           {pages.map((page, i) =>
             page === '...' ? (
-              <span key={`ellipsis-${i}`} className="px-2 text-white/30 text-xs">
+              <span key={`ellipsis-${i}`} className="px-2 text-gray-400 text-xs">
                 …
               </span>
             ) : (
@@ -49,8 +49,8 @@ export function Pagination({
                 className={cn(
                   'min-w-[28px] h-7 px-2 rounded-lg text-xs font-medium transition-colors',
                   currentPage === page
-                    ? 'bg-white text-black'
-                    : 'text-white/50 hover:text-white hover:bg-white/10',
+                    ? 'bg-gray-900 text-white'
+                    : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100',
                 )}
               >
                 {page}
@@ -61,7 +61,7 @@ export function Pagination({
           <button
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             aria-label="Página siguiente"
           >
             <ChevronRight size={14} />

@@ -1,6 +1,6 @@
 import { useState, useEffect, type KeyboardEvent } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Plus, Minus, ShoppingBag, Ship, Warehouse } from 'lucide-react'
+import { ArrowLeft, Plus, Minus, ShoppingBag, Ship, Warehouse, Check } from 'lucide-react'
 import { useProductDetail } from '@/features/catalog/hooks/useProductDetail'
 import { useAddToCart } from '@/features/cart/hooks/useAddToCart'
 import { useAuthStore } from '@/store/authStore'
@@ -12,7 +12,290 @@ import { formatCurrency } from '@/utils/formatCurrency'
 import { cn } from '@/utils/cn'
 import type { ProductVariant } from '@/types/database.types'
 
-// ─── Shared quantity stepper ──────────────────────────────────────────────────
+// ─── Color map ────────────────────────────────────────────────────────────────
+
+const COLOR_HEX: Record<string, string> = {
+  'Negro':       '#111111',
+  'Blanco':      '#F5F5F5',
+  'Beige':       '#D4B896',
+  'Rojo':        '#C0392B',
+  'Azul marino': '#1A3A5C',
+  'Azul':        '#2980B9',
+  'Verde':       '#27AE60',
+  'Camel':       '#C19A6B',
+  'Gris':        '#7F8C8D',
+  'Rosa':        '#E91E8C',
+  'Marrón':      '#795548',
+  'Mostaza':     '#F39C12',
+}
+
+const LIGHT_COLORS = new Set(['Blanco', 'Beige', 'Mostaza'])
+
+// ─── Variant type detection ───────────────────────────────────────────────────
+
+type VariantType = 'size' | 'color' | 'size_color' | 'legacy'
+
+function detectVariantType(variants: ProductVariant[]): VariantType {
+  const first = variants.find((v) => v.attributes?.type)
+  return (first?.attributes?.type as VariantType) ?? 'legacy'
+}
+
+// ─── Smart variant selector ───────────────────────────────────────────────────
+
+interface VariantSelectorProps {
+  variants: ProductVariant[]
+  selectedVariant: ProductVariant | null
+  onSelect: (v: ProductVariant | null) => void
+}
+
+function VariantSelector({ variants, selectedVariant, onSelect }: VariantSelectorProps) {
+  const type = detectVariantType(variants)
+
+  // size_color — two-step state
+  const [selectedColor, setSelectedColor] = useState<string | null>(null)
+  const [selectedSize, setSelectedSize] = useState<string | null>(null)
+
+  // When color changes, reset size and variant
+  const handleColorSelect = (color: string) => {
+    const next = selectedColor === color ? null : color
+    setSelectedColor(next)
+    setSelectedSize(null)
+    onSelect(null)
+  }
+
+  // When size is picked (with color already selected), find matching variant
+  const handleSizeSelect = (size: string) => {
+    const next = selectedSize === size ? null : size
+    setSelectedSize(next)
+    if (next && selectedColor) {
+      const match = variants.find(
+        (v) => v.attributes?.color === selectedColor && v.attributes?.size === next,
+      )
+      onSelect(match ?? null)
+    } else {
+      onSelect(null)
+    }
+  }
+
+  // ── size_color ──
+  if (type === 'size_color') {
+    const uniqueColors = [...new Set(
+      variants.map((v) => v.attributes?.color as string).filter(Boolean),
+    )]
+    const sizesForColor = selectedColor
+      ? variants.filter((v) => v.attributes?.color === selectedColor)
+      : []
+
+    return (
+      <div className="flex flex-col gap-4">
+        {/* Step 1 — Color */}
+        <div className="flex flex-col gap-2">
+          <p className="text-xs text-gray-400 uppercase tracking-wider font-medium">Color</p>
+          <div className="flex flex-wrap gap-3">
+            {uniqueColors.map((color) => {
+              const hex = COLOR_HEX[color] ?? '#ccc'
+              const isLight = LIGHT_COLORS.has(color)
+              const isSelected = selectedColor === color
+              const allOutOfStock = variants
+                .filter((v) => v.attributes?.color === color)
+                .every((v) => v.stock_quantity === 0)
+
+              return (
+                <button
+                  key={color}
+                  type="button"
+                  onClick={() => handleColorSelect(color)}
+                  title={color}
+                  className="flex flex-col items-center gap-1.5"
+                >
+                  <div
+                    className={cn(
+                      'size-9 rounded-full border-2 flex items-center justify-center transition-all',
+                      isSelected
+                        ? 'border-gray-900 scale-110 shadow-[0_0_0_2px_rgba(0,0,0,0.15)]'
+                        : 'border-transparent hover:scale-105 hover:border-gray-300',
+                      allOutOfStock && 'opacity-50',
+                    )}
+                    style={{ backgroundColor: hex }}
+                  >
+                    {isSelected && (
+                      <Check
+                        size={14}
+                        className={isLight ? 'text-gray-900' : 'text-white'}
+                        strokeWidth={3}
+                      />
+                    )}
+                  </div>
+                  <span className={cn(
+                    'text-[10px] leading-tight',
+                    isSelected ? 'text-gray-900 font-medium' : 'text-gray-400',
+                  )}>
+                    {color}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Step 2 — Size (only after color picked) */}
+        {selectedColor && (
+          <div className="flex flex-col gap-2">
+            <p className="text-xs text-gray-400 uppercase tracking-wider font-medium">Talla</p>
+            <div className="flex flex-wrap gap-2">
+              {sizesForColor.map((v) => {
+                const size = v.attributes?.size as string
+                const outOfStock = v.stock_quantity === 0
+                const isSelected = selectedSize === size
+                return (
+                  <button
+                    key={v.id}
+                    type="button"
+                    onClick={() => handleSizeSelect(size)}
+                    className={cn(
+                      'min-w-[44px] h-10 px-3 rounded-lg border text-sm font-medium transition-all',
+                      isSelected
+                        ? 'border-gray-900 bg-gray-900 text-white'
+                        : outOfStock
+                        ? 'border-blue-200 text-blue-400 hover:border-blue-300'
+                        : 'border-gray-200 text-gray-700 hover:border-gray-400 hover:text-gray-900',
+                    )}
+                  >
+                    {size}
+                    {outOfStock && (
+                      <span className="block text-[9px] font-normal leading-none mt-0.5 text-blue-400">
+                        pre
+                      </span>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  // ── color only ──
+  if (type === 'color') {
+    return (
+      <div className="flex flex-col gap-2">
+        <p className="text-xs text-gray-400 uppercase tracking-wider font-medium">Color</p>
+        <div className="flex flex-wrap gap-3">
+          {variants.map((v) => {
+            const color = v.attributes?.color as string ?? v.label
+            const hex = COLOR_HEX[color] ?? '#ccc'
+            const isLight = LIGHT_COLORS.has(color)
+            const isSelected = selectedVariant?.id === v.id
+            return (
+              <button
+                key={v.id}
+                type="button"
+                onClick={() => onSelect(isSelected ? null : v)}
+                title={color}
+                className="flex flex-col items-center gap-1.5"
+              >
+                <div
+                  className={cn(
+                    'size-9 rounded-full border-2 flex items-center justify-center transition-all',
+                    isSelected
+                      ? 'border-gray-900 scale-110 shadow-[0_0_0_2px_rgba(0,0,0,0.15)]'
+                      : 'border-transparent hover:scale-105 hover:border-gray-300',
+                    v.stock_quantity === 0 && 'opacity-50',
+                  )}
+                  style={{ backgroundColor: hex }}
+                >
+                  {isSelected && (
+                    <Check size={14} className={isLight ? 'text-gray-900' : 'text-white'} strokeWidth={3} />
+                  )}
+                </div>
+                <span className={cn('text-[10px] leading-tight', isSelected ? 'text-gray-900 font-medium' : 'text-gray-400')}>
+                  {color}
+                </span>
+              </button>
+            )
+          })}
+        </div>
+      </div>
+    )
+  }
+
+  // ── size only ──
+  if (type === 'size') {
+    return (
+      <div className="flex flex-col gap-2">
+        <p className="text-xs text-gray-400 uppercase tracking-wider font-medium">Talla</p>
+        <div className="flex flex-wrap gap-2">
+          {variants.map((v) => {
+            const outOfStock = v.stock_quantity === 0
+            const isSelected = selectedVariant?.id === v.id
+            return (
+              <button
+                key={v.id}
+                type="button"
+                onClick={() => onSelect(isSelected ? null : v)}
+                className={cn(
+                  'min-w-[44px] h-10 px-3 rounded-lg border text-sm font-medium transition-all',
+                  isSelected
+                    ? 'border-gray-900 bg-gray-900 text-white'
+                    : outOfStock
+                    ? 'border-blue-200 text-blue-400 hover:border-blue-300'
+                    : 'border-gray-200 text-gray-700 hover:border-gray-400 hover:text-gray-900',
+                )}
+              >
+                {v.attributes?.size ?? v.label}
+                {outOfStock && (
+                  <span className="block text-[9px] font-normal leading-none mt-0.5 text-blue-400">
+                    pre
+                  </span>
+                )}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+    )
+  }
+
+  // ── legacy (free-form labels) ──
+  return (
+    <div className="flex flex-col gap-2">
+      <p className="text-xs text-gray-400 uppercase tracking-wider font-medium">
+        Seleccioná una opción
+      </p>
+      <div className="flex flex-wrap gap-2">
+        {variants.map((v) => {
+          const outOfStock = v.stock_quantity === 0
+          const isSelected = selectedVariant?.id === v.id
+          return (
+            <button
+              key={v.id}
+              type="button"
+              onClick={() => onSelect(isSelected ? null : v)}
+              className={cn(
+                'px-3 py-1.5 rounded-lg border text-sm font-medium transition-all',
+                isSelected
+                  ? 'border-gray-900 bg-gray-100 text-gray-900'
+                  : outOfStock
+                  ? 'border-blue-200 text-blue-400 hover:border-blue-300'
+                  : 'border-gray-200 text-gray-600 hover:border-gray-400 hover:text-gray-900',
+              )}
+            >
+              {v.label}
+              {outOfStock && <span className="ml-1 text-[10px] text-blue-400">·pre</span>}
+              {v.price_override != null && (
+                <span className="ml-1.5 text-xs opacity-70">{formatCurrency(v.price_override)}</span>
+              )}
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+// ─── Quantity stepper ─────────────────────────────────────────────────────────
 
 interface QtyControlProps {
   value: number
@@ -26,54 +309,29 @@ interface QtyControlProps {
   disabled?: boolean
 }
 
-function QtyControl({
-  value,
-  localValue,
-  onLocalChange,
-  onDecrement,
-  onIncrement,
-  onCommit,
-  onKeyDown,
-  max,
-  disabled,
-}: QtyControlProps) {
+function QtyControl({ value, localValue, onLocalChange, onDecrement, onIncrement, onCommit, onKeyDown, max, disabled }: QtyControlProps) {
   const handleChange = (raw: string) => {
     if (max !== undefined) {
       const parsed = parseInt(raw, 10)
-      if (!isNaN(parsed) && parsed > max) {
-        onLocalChange(String(max))
-        return
-      }
+      if (!isNaN(parsed) && parsed > max) { onLocalChange(String(max)); return }
     }
     onLocalChange(raw)
   }
 
   return (
-    <div className="flex items-center gap-2 bg-white/5 rounded-xl px-3 py-2">
-      <button
-        type="button"
-        onClick={onDecrement}
-        disabled={disabled || value <= 1}
-        className="text-white/60 hover:text-white transition-colors disabled:opacity-40"
-      >
+    <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-3 py-2">
+      <button type="button" onClick={onDecrement} disabled={disabled || value <= 1}
+        className="text-gray-400 hover:text-gray-700 transition-colors disabled:opacity-40">
         <Minus size={16} />
       </button>
       <input
-        type="number"
-        min="1"
-        max={max}
-        value={localValue}
+        type="number" min="1" max={max} value={localValue}
         onChange={(e) => handleChange(e.target.value)}
-        onBlur={onCommit}
-        onKeyDown={onKeyDown}
-        className="w-14 text-center text-sm font-semibold text-white bg-transparent border border-white/20 rounded-md py-0.5 focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/10 transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+        onBlur={onCommit} onKeyDown={onKeyDown}
+        className="w-14 text-center text-sm font-semibold text-gray-900 bg-transparent border border-gray-200 rounded-md py-0.5 focus:outline-none focus:border-gray-400 transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
       />
-      <button
-        type="button"
-        onClick={onIncrement}
-        disabled={disabled || (max !== undefined && value >= max)}
-        className="text-white/60 hover:text-white transition-colors disabled:opacity-40"
-      >
+      <button type="button" onClick={onIncrement} disabled={disabled || (max !== undefined && value >= max)}
+        className="text-gray-400 hover:text-gray-700 transition-colors disabled:opacity-40">
         <Plus size={16} />
       </button>
     </div>
@@ -88,11 +346,8 @@ export function ProductDetailPage() {
   const userId = useAuthStore((s) => s.user?.id)
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null)
 
-  // Stock section state (capped at effectiveStock)
   const [stockQty, setStockQty] = useState(1)
   const [localStockQty, setLocalStockQty] = useState('1')
-
-  // Pre-order section state (uncapped)
   const [preorderQty, setPreorderQty] = useState(1)
   const [localPreorderQty, setLocalPreorderQty] = useState('1')
 
@@ -111,56 +366,38 @@ export function ProductDetailPage() {
   const effectivePrice = selectedVariant?.price_override ?? product.price
   const effectiveStock = selectedVariant
     ? selectedVariant.stock_quantity
-    : hasVariants
-    ? 0
-    : product.stock_quantity
+    : hasVariants ? 0 : product.stock_quantity
 
   const variantReady = !hasVariants || selectedVariant !== null
-
-  // Clamp stock qty whenever effectiveStock changes
   const clampedStockQty = Math.min(stockQty, effectiveStock)
 
   const commitStockQty = () => {
     const parsed = parseInt(localStockQty, 10)
     const clamped = Math.max(1, Math.min(isNaN(parsed) ? 1 : parsed, effectiveStock))
-    setStockQty(clamped)
-    setLocalStockQty(String(clamped))
+    setStockQty(clamped); setLocalStockQty(String(clamped))
   }
 
   const commitPreorderQty = () => {
     const parsed = parseInt(localPreorderQty, 10)
     const valid = Math.max(1, isNaN(parsed) ? 1 : parsed)
-    setPreorderQty(valid)
-    setLocalPreorderQty(String(valid))
+    setPreorderQty(valid); setLocalPreorderQty(String(valid))
   }
 
   const handleAddStock = () => {
     if (!userId || !variantReady) return
-    addToCart({
-      userId,
-      productId: product.id,
-      quantity: clampedStockQty,
-      variantId: selectedVariant?.id,
-      fulfillmentSource: 'stock',
-    })
+    addToCart({ userId, productId: product.id, quantity: clampedStockQty, variantId: selectedVariant?.id, fulfillmentSource: 'stock' })
   }
 
   const handleAddPreorder = () => {
     if (!userId || !variantReady) return
-    addToCart({
-      userId,
-      productId: product.id,
-      quantity: preorderQty,
-      variantId: selectedVariant?.id,
-      fulfillmentSource: 'container',
-    })
+    addToCart({ userId, productId: product.id, quantity: preorderQty, variantId: selectedVariant?.id, fulfillmentSource: 'container' })
   }
 
   return (
     <div className="max-w-4xl mx-auto p-4">
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-6"
+        className="flex items-center gap-2 text-gray-400 hover:text-gray-700 transition-colors mb-6"
       >
         <ArrowLeft size={16} />
         <span className="text-sm">Volver al catálogo</span>
@@ -175,52 +412,30 @@ export function ProductDetailPage() {
         {/* Info */}
         <div className="flex flex-col gap-5">
           <div>
-            <p className="text-xs text-white/40 uppercase tracking-wider mb-1">{product.sku}</p>
-            <h1 className="text-2xl font-semibold text-white">{product.name}</h1>
+            <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{product.sku}</p>
+            <h1 className="text-2xl font-semibold text-gray-900">{product.name}</h1>
           </div>
 
-          <p className="text-2xl font-bold text-gold">{formatCurrency(effectivePrice)}</p>
+          <p className="text-2xl font-bold text-gray-900">{formatCurrency(effectivePrice)}</p>
 
           {product.description && (
-            <p className="text-sm text-white/60 leading-relaxed">{product.description}</p>
+            <p className="text-sm text-gray-500 leading-relaxed">{product.description}</p>
           )}
 
-          {/* Variant selector */}
+          {/* Smart variant selector */}
           {hasVariants && (
-            <div className="flex flex-col gap-2">
-              <p className="text-xs text-white/40 uppercase tracking-wider font-medium">
-                Seleccioná una opción
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {activeVariants.map((v) => {
-                  const outOfStock = v.stock_quantity === 0
-                  const isSelected = selectedVariant?.id === v.id
-                  return (
-                    <button
-                      key={v.id}
-                      type="button"
-                      onClick={() => setSelectedVariant(isSelected ? null : v)}
-                      className={cn(
-                        'px-3 py-1.5 rounded-lg border text-sm font-medium transition-all',
-                        isSelected
-                          ? 'border-white/60 bg-white/10 text-white'
-                          : outOfStock
-                          ? 'border-info/20 text-info/60 hover:border-info/40'
-                          : 'border-white/15 text-white/70 hover:border-white/40 hover:text-white',
-                      )}
-                    >
-                      {v.label}
-                      {outOfStock && <span className="ml-1 text-[10px] text-info/50">·pre</span>}
-                      {v.price_override != null && (
-                        <span className="ml-1.5 text-xs opacity-70">
-                          {formatCurrency(v.price_override)}
-                        </span>
-                      )}
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
+            <VariantSelector
+              variants={activeVariants}
+              selectedVariant={selectedVariant}
+              onSelect={setSelectedVariant}
+            />
+          )}
+
+          {/* Prompt si falta seleccionar variante */}
+          {hasVariants && !selectedVariant && (
+            <p className="text-sm text-amber-500">
+              Seleccioná una opción para ver las formas de compra
+            </p>
           )}
 
           {/* Stock indicator */}
@@ -228,57 +443,39 @@ export function ProductDetailPage() {
             <div className="flex items-center gap-2 text-sm">
               {effectiveStock > 0 ? (
                 <>
-                  <span className="size-2 rounded-full bg-success flex-shrink-0" />
-                  <span className="text-white/50">
-                    <span className="text-success font-medium">{effectiveStock}</span> unidades en stock
+                  <span className="size-2 rounded-full bg-green-500 flex-shrink-0" />
+                  <span className="text-gray-500">
+                    <span className="text-green-600 font-medium">{effectiveStock}</span> unidades en stock
                   </span>
                 </>
               ) : (
                 <>
-                  <Ship size={14} className="text-info flex-shrink-0" />
-                  <span className="text-info/70">Sin stock · solo disponible por pre-pedido</span>
+                  <Ship size={14} className="text-blue-400 flex-shrink-0" />
+                  <span className="text-blue-400">Sin stock · solo disponible por pre-pedido</span>
                 </>
               )}
             </div>
           )}
 
-          {/* Prompt if variant not yet selected */}
-          {hasVariants && !selectedVariant && (
-            <p className="text-sm text-warning/80">
-              Seleccioná una opción para ver las formas de compra
-            </p>
-          )}
-
-          {/* ── Stock section ── */}
+          {/* Stock section */}
           {variantReady && effectiveStock > 0 && (
-            <div className="rounded-xl border border-success/20 bg-success/5 p-4 flex flex-col gap-3">
+            <div className="rounded-xl border border-green-200 bg-green-50 p-4 flex flex-col gap-3">
               <div className="flex items-center gap-2 flex-wrap">
-                <Warehouse size={14} className="text-success" />
-                <span className="text-sm font-medium text-white">Comprar desde stock</span>
-                <span className="text-xs text-white/40">máx. {effectiveStock} u.</span>
+                <Warehouse size={14} className="text-green-600" />
+                <span className="text-sm font-medium text-gray-900">Comprar desde stock</span>
+                <span className="text-xs text-gray-400">máx. {effectiveStock} u.</span>
               </div>
               <div className="flex items-center gap-3">
                 <QtyControl
-                  value={clampedStockQty}
-                  localValue={localStockQty}
+                  value={clampedStockQty} localValue={localStockQty}
                   onLocalChange={setLocalStockQty}
                   onDecrement={() => setStockQty((q) => Math.max(1, q - 1))}
                   onIncrement={() => setStockQty((q) => Math.min(effectiveStock, q + 1))}
                   onCommit={commitStockQty}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') commitStockQty()
-                    if (e.key === 'Escape') setLocalStockQty(String(clampedStockQty))
-                  }}
-                  max={effectiveStock}
-                  disabled={isPending}
+                  onKeyDown={(e) => { if (e.key === 'Enter') commitStockQty(); if (e.key === 'Escape') setLocalStockQty(String(clampedStockQty)) }}
+                  max={effectiveStock} disabled={isPending}
                 />
-                <Button
-                  onClick={handleAddStock}
-                  isLoading={isPending}
-                  disabled={!userId}
-                  className="flex-1"
-                  size="lg"
-                >
+                <Button onClick={handleAddStock} isLoading={isPending} disabled={!userId} className="flex-1" size="lg">
                   <ShoppingBag size={18} />
                   Agregar al carrito
                 </Button>
@@ -286,34 +483,28 @@ export function ProductDetailPage() {
             </div>
           )}
 
-          {/* ── Pre-order section ── */}
+          {/* Pre-order section */}
           {variantReady && (
-            <div className="rounded-xl border border-info/20 bg-info/5 p-4 flex flex-col gap-3">
+            <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 flex flex-col gap-3">
               <div className="flex items-center gap-2 flex-wrap">
-                <Ship size={14} className="text-info" />
-                <span className="text-sm font-medium text-white">Pre-pedido</span>
-                <span className="text-xs text-white/40">sin límite · llega con el próximo container</span>
+                <Ship size={14} className="text-blue-500" />
+                <span className="text-sm font-medium text-gray-900">Pre-pedido</span>
+                <span className="text-xs text-gray-400">sin límite · llega con el próximo container</span>
               </div>
               <div className="flex items-center gap-3">
                 <QtyControl
-                  value={preorderQty}
-                  localValue={localPreorderQty}
+                  value={preorderQty} localValue={localPreorderQty}
                   onLocalChange={setLocalPreorderQty}
                   onDecrement={() => setPreorderQty((q) => Math.max(1, q - 1))}
                   onIncrement={() => setPreorderQty((q) => q + 1)}
                   onCommit={commitPreorderQty}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') commitPreorderQty()
-                    if (e.key === 'Escape') setLocalPreorderQty(String(preorderQty))
-                  }}
+                  onKeyDown={(e) => { if (e.key === 'Enter') commitPreorderQty(); if (e.key === 'Escape') setLocalPreorderQty(String(preorderQty)) }}
                   disabled={isPending}
                 />
                 <Button
-                  onClick={handleAddPreorder}
-                  isLoading={isPending}
-                  disabled={!userId}
-                  variant="secondary"
-                  className="flex-1 border border-info/20"
+                  onClick={handleAddPreorder} isLoading={isPending} disabled={!userId}
+                  variant="outline"
+                  className="flex-1 border-blue-200 text-blue-600 hover:bg-blue-100"
                   size="lg"
                 >
                   <Ship size={18} />

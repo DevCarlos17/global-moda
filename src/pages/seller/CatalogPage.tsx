@@ -25,7 +25,6 @@ export function CatalogPage() {
   const { data: products, isLoading, error, refetch } = useSearchProducts({ search, categoryId, sort })
   const { data: categories = [] } = useCategories()
 
-  // Client-side in-stock filter
   const filteredProducts = useMemo(() => {
     if (!products) return []
     if (!inStockOnly) return products
@@ -57,7 +56,7 @@ export function CatalogPage() {
       <div className="flex-1 min-w-0">
 
         {/* Toolbar */}
-        <div className="px-4 py-2.5 border-b border-white/10 sticky top-16 bg-black z-20 flex items-center gap-3">
+        <div className="px-4 py-2.5 border-b border-gray-200 sticky top-16 bg-white z-20 flex items-center gap-3">
           {/* Mobile: search input */}
           <div className="flex-1 md:hidden">
             <ProductSearchBar value={search} onChange={setSearch} />
@@ -65,7 +64,7 @@ export function CatalogPage() {
 
           {/* Desktop: result count */}
           {!isLoading && (
-            <p className="hidden md:block text-xs text-white/30">
+            <p className="hidden md:block text-xs text-gray-400">
               {filteredProducts.length}{' '}
               {filteredProducts.length === 1 ? 'producto' : 'productos'}
             </p>
@@ -77,14 +76,14 @@ export function CatalogPage() {
             className={cn(
               'md:hidden flex items-center gap-1.5 px-3 h-9 rounded-lg border text-sm transition-colors flex-shrink-0',
               mobileFilterOpen || activeFilterCount > 0
-                ? 'border-white/40 text-white bg-white/10'
-                : 'border-white/10 text-white/60 hover:text-white hover:bg-white/5',
+                ? 'border-gray-900 text-gray-900 bg-gray-100'
+                : 'border-gray-200 text-gray-500 hover:text-gray-900 hover:bg-gray-50',
             )}
           >
             <SlidersHorizontal size={13} />
             Filtros
             {activeFilterCount > 0 && (
-              <span className="size-4 flex items-center justify-center bg-white rounded-full text-black text-[10px] font-bold">
+              <span className="size-4 flex items-center justify-center bg-gray-900 rounded-full text-white text-[10px] font-bold">
                 {activeFilterCount}
               </span>
             )}
@@ -93,10 +92,10 @@ export function CatalogPage() {
 
         {/* Mobile filter panel */}
         {mobileFilterOpen && (
-          <div className="md:hidden px-4 py-3 border-b border-white/[0.08] bg-black flex flex-col gap-4">
+          <div className="md:hidden px-4 py-3 border-b border-gray-100 bg-white flex flex-col gap-4">
             {/* Sort */}
             <div>
-              <p className="text-[9px] font-semibold text-white/30 uppercase tracking-widest mb-2">
+              <p className="text-[9px] font-semibold text-gray-400 uppercase tracking-widest mb-2">
                 Ordenar
               </p>
               <div className="flex flex-wrap gap-1.5">
@@ -107,8 +106,8 @@ export function CatalogPage() {
                     className={cn(
                       'px-2.5 py-1 rounded-full text-xs border transition-colors',
                       sort === o.value
-                        ? 'border-white/40 text-white bg-white/10'
-                        : 'border-white/10 text-white/50 hover:text-white',
+                        ? 'border-gray-900 text-gray-900 bg-gray-100'
+                        : 'border-gray-200 text-gray-500 hover:text-gray-900',
                     )}
                   >
                     {o.label}
@@ -125,14 +124,14 @@ export function CatalogPage() {
               <span
                 className={cn(
                   'size-4 rounded border flex-shrink-0 flex items-center justify-center transition-colors',
-                  inStockOnly ? 'bg-white border-white' : 'border-white/25 bg-transparent',
+                  inStockOnly ? 'bg-gray-900 border-gray-900' : 'border-gray-300 bg-transparent',
                 )}
               >
                 {inStockOnly && (
                   <svg viewBox="0 0 8 6" width="8" height="6" fill="none">
                     <path
                       d="M1 3L3 5L7 1"
-                      stroke="#0A0A0A"
+                      stroke="#ffffff"
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -140,14 +139,14 @@ export function CatalogPage() {
                   </svg>
                 )}
               </span>
-              <span className={cn('text-xs', inStockOnly ? 'text-white' : 'text-white/50')}>
+              <span className={cn('text-xs', inStockOnly ? 'text-gray-900' : 'text-gray-500')}>
                 Solo con stock
               </span>
             </button>
 
             {/* Categories */}
             <div>
-              <p className="text-[9px] font-semibold text-white/30 uppercase tracking-widest mb-2">
+              <p className="text-[9px] font-semibold text-gray-400 uppercase tracking-widest mb-2">
                 Categoría
               </p>
               <div className="flex flex-wrap gap-1.5">
@@ -156,8 +155,8 @@ export function CatalogPage() {
                   className={cn(
                     'px-2.5 py-1 rounded-full text-xs border transition-colors',
                     categoryId === null
-                      ? 'border-gold text-gold bg-gold/10'
-                      : 'border-white/10 text-white/50 hover:text-white',
+                      ? 'border-gray-900 text-gray-900 bg-gray-100'
+                      : 'border-gray-200 text-gray-500 hover:text-gray-900',
                   )}
                 >
                   Todos
@@ -169,8 +168,8 @@ export function CatalogPage() {
                     className={cn(
                       'px-2.5 py-1 rounded-full text-xs border transition-colors',
                       categoryId === cat.id
-                        ? 'border-white/40 text-white bg-white/10'
-                        : 'border-white/10 text-white/50 hover:text-white',
+                        ? 'border-gray-900 text-gray-900 bg-gray-100'
+                        : 'border-gray-200 text-gray-500 hover:text-gray-900',
                     )}
                   >
                     {cat.name}

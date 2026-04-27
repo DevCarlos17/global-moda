@@ -16,7 +16,7 @@ import type { StoreInfo } from '@/features/orders/types/order.types'
 function FulfillmentBadge({ item }: { item: CartItemWithProduct }) {
   if (item.fulfillment_source === 'container') {
     return (
-      <span className="inline-flex items-center gap-1 mt-0.5 text-[10px] font-medium text-info/70">
+      <span className="inline-flex items-center gap-1 mt-0.5 text-[10px] font-medium text-blue-400">
         <Ship size={9} />
         Pre-pedido
       </span>
@@ -78,21 +78,21 @@ export function OrderReviewForm() {
 
       {/* ── Left: product list ── */}
       <Card>
-        <p className="text-xs text-white/40 uppercase tracking-wider mb-4">
+        <p className="text-xs text-gray-400 uppercase tracking-wider mb-4">
           Productos ({itemCount} unidades · {items.length} referencias)
         </p>
 
         {/* Fulfillment summary banner */}
         {hasSplit && (
-          <div className="mb-4 px-3 py-2.5 rounded-xl bg-warning/5 border border-warning/15 flex flex-wrap gap-3 text-xs">
+          <div className="mb-4 px-3 py-2.5 rounded-xl bg-amber-50 border border-amber-100 flex flex-wrap gap-3 text-xs">
             {totalStockUnits > 0 && (
-              <span className="flex items-center gap-1.5 text-success">
+              <span className="flex items-center gap-1.5 text-green-600">
                 <Warehouse size={11} />
                 <span className="font-medium">{totalStockUnits}</span> desde stock
               </span>
             )}
             {totalContainerUnits > 0 && (
-              <span className="flex items-center gap-1.5 text-info">
+              <span className="flex items-center gap-1.5 text-blue-500">
                 <Ship size={11} />
                 <span className="font-medium">{totalContainerUnits}</span> pre-pedido (sin stock actual)
               </span>
@@ -100,22 +100,22 @@ export function OrderReviewForm() {
           </div>
         )}
 
-        <ul className="divide-y divide-white/10 md:max-h-96 md:overflow-y-auto">
+        <ul className="divide-y divide-gray-100 md:max-h-96 md:overflow-y-auto">
           {visibleItems.map((item) => (
             <li key={item.id} className="flex justify-between gap-4 py-2.5 text-sm">
               <div className="min-w-0">
-                <span className="text-white/80 truncate block">
+                <span className="text-gray-700 truncate block">
                   {item.product.name}
                 </span>
                 {item.variant && (
-                  <span className="text-[11px] text-white/40">{item.variant.label}</span>
+                  <span className="text-[11px] text-gray-400">{item.variant.label}</span>
                 )}
-                <span className="text-xs text-white/40 block">
+                <span className="text-xs text-gray-400 block">
                   {item.quantity} × {formatCurrency(item.product.price)}
                 </span>
                 <FulfillmentBadge item={item} />
               </div>
-              <span className="text-white font-medium flex-shrink-0 text-right">
+              <span className="text-gray-900 font-medium flex-shrink-0 text-right">
                 {formatCurrency(item.quantity * item.product.price)}
               </span>
             </li>
@@ -126,7 +126,7 @@ export function OrderReviewForm() {
           <button
             type="button"
             onClick={() => setItemsExpanded((v) => !v)}
-            className="md:hidden flex items-center gap-1 mt-2 text-xs text-white/40 hover:text-white/70 transition-colors"
+            className="md:hidden flex items-center gap-1 mt-2 text-xs text-gray-400 hover:text-gray-700 transition-colors"
           >
             {itemsExpanded ? (
               <><ChevronUp size={14} /> Mostrar menos</>
@@ -136,16 +136,16 @@ export function OrderReviewForm() {
           </button>
         )}
 
-        <div className="flex justify-between pt-3 mt-3 border-t border-white/10">
-          <span className="text-white/60 font-medium">Total</span>
-          <span className="text-gold font-bold text-lg">{formatCurrency(subtotal)}</span>
+        <div className="flex justify-between pt-3 mt-3 border-t border-gray-100">
+          <span className="text-gray-500 font-medium">Total</span>
+          <span className="text-gray-900 font-bold text-lg">{formatCurrency(subtotal)}</span>
         </div>
       </Card>
 
       {/* ── Right: form ── */}
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-4 md:mt-0 md:sticky md:top-20">
         <Card>
-          <p className="text-xs text-white/40 uppercase tracking-wider mb-4">
+          <p className="text-xs text-gray-400 uppercase tracking-wider mb-4">
             Información de la tienda
           </p>
           <div className="flex flex-col gap-4">
@@ -179,7 +179,7 @@ export function OrderReviewForm() {
 
         <Card>
           {loadingAdmins ? (
-            <div className="h-10 rounded-lg bg-white/5 animate-pulse" />
+            <div className="h-10 rounded-lg bg-gray-100 animate-pulse" />
           ) : adminOptions.length > 0 ? (
             <Select
               label="Administrador *"
@@ -194,7 +194,7 @@ export function OrderReviewForm() {
             </p>
           )}
           {selectedAdmin?.phone && (
-            <p className="mt-2 text-xs text-white/40 flex items-center gap-1">
+            <p className="mt-2 text-xs text-gray-400 flex items-center gap-1">
               <span>📱</span>
               <span>WhatsApp: +{selectedAdmin.phone}</span>
             </p>
@@ -202,7 +202,7 @@ export function OrderReviewForm() {
         </Card>
 
         {!storeInfo.store_name && (
-          <p className="text-xs text-white/40 text-center">
+          <p className="text-xs text-gray-400 text-center">
             Completá el nombre de la tienda para continuar
           </p>
         )}

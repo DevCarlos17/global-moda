@@ -12,18 +12,18 @@ export function CartPage() {
     <div className="max-w-xl mx-auto p-4">
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-6"
+        className="flex items-center gap-2 text-gray-400 hover:text-gray-900 transition-colors mb-6"
       >
         <ArrowLeft size={16} />
         <span className="text-sm">Seguir comprando</span>
       </button>
 
-      <h1 className="text-xl font-semibold text-white mb-6">Mi Carrito</h1>
+      <h1 className="text-xl font-semibold text-gray-900 mb-6">Mi Carrito</h1>
 
-      <div className="bg-surface border border-white/10 rounded-2xl overflow-hidden">
+      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
         <CartList />
         {items.length > 0 && (
-          <div className="border-t border-white/10">
+          <div className="border-t border-gray-200">
             <CartSummary />
           </div>
         )}

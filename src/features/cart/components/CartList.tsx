@@ -17,7 +17,7 @@ export function CartList() {
   }
 
   return (
-    <ul className="divide-y divide-white/10">
+    <ul className="divide-y divide-gray-100">
       {items.map((item) => (
         <li key={item.id}>
           <CartItem item={item} />

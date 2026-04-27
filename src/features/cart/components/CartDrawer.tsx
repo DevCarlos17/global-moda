@@ -13,7 +13,7 @@ export function CartDrawer() {
       {/* Backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/60 z-40"
+          className="fixed inset-0 bg-[#0a0a0a]/50 z-40"
           onClick={closeCart}
           aria-hidden="true"
         />
@@ -21,18 +21,18 @@ export function CartDrawer() {
 
       {/* Drawer */}
       <aside
-        className={`fixed right-0 top-0 h-full w-full max-w-sm bg-surface border-l border-white/10 z-50
+        className={`fixed right-0 top-0 h-full w-full max-w-sm bg-white border-l border-gray-200 z-50
           flex flex-col transition-transform duration-300 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         {/* Header */}
-        <div className="h-16 flex items-center justify-between px-6 border-b border-white/10 flex-shrink-0">
+        <div className="h-16 flex items-center justify-between px-6 border-b border-gray-200 flex-shrink-0">
           <div className="flex items-center gap-2">
-            <ShoppingBag size={18} className="text-gold" />
-            <span className="font-semibold text-white">Mi Carrito</span>
+            <ShoppingBag size={18} className="text-gray-900" />
+            <span className="font-semibold text-gray-900">Mi Carrito</span>
           </div>
           <button
             onClick={closeCart}
-            className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-colors"
+            className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
             aria-label="Cerrar carrito"
           >
             <X size={16} />
@@ -46,7 +46,7 @@ export function CartDrawer() {
 
         {/* Summary */}
         {items.length > 0 && (
-          <div className="border-t border-white/10 flex-shrink-0">
+          <div className="border-t border-gray-200 flex-shrink-0">
             <CartSummary />
           </div>
         )}

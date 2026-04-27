@@ -48,7 +48,7 @@ export function Modal({ isOpen, onClose, title, description, children, size = 'm
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-[#0a0a0a]/50 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -56,23 +56,23 @@ export function Modal({ isOpen, onClose, title, description, children, size = 'm
       {/* Dialog */}
       <div
         className={cn(
-          'relative w-full bg-surface border border-white/10 rounded-2xl shadow-luxury-lg',
+          'relative w-full bg-white border border-gray-200 rounded-xl shadow-dropdown',
           sizeClasses[size],
           className,
         )}
       >
         {/* Header */}
         {(title || description) && (
-          <div className="flex items-start justify-between gap-4 p-6 border-b border-white/10">
+          <div className="flex items-start justify-between gap-4 p-6 border-b border-gray-100">
             <div>
-              {title && <h2 className="text-lg font-semibold text-white">{title}</h2>}
+              {title && <h2 className="text-base font-semibold text-gray-900">{title}</h2>}
               {description && (
-                <p className="mt-1 text-sm text-white/60">{description}</p>
+                <p className="mt-1 text-sm text-gray-500">{description}</p>
               )}
             </div>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-colors"
+              className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
               aria-label="Cerrar"
             >
               <X size={16} />

@@ -19,13 +19,13 @@ export function ProductFormPage() {
     <div>
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-6"
+        className="flex items-center gap-2 text-gray-400 hover:text-gray-900 transition-colors mb-6"
       >
         <ArrowLeft size={16} />
         <span className="text-sm">Volver a productos</span>
       </button>
 
-      <h1 className="text-2xl font-semibold text-white mb-6">
+      <h1 className="text-2xl font-semibold text-gray-900 mb-6">
         {isEditing ? 'Editar producto' : 'Nuevo producto'}
       </h1>
 

@@ -25,12 +25,12 @@ export function ProductPreviewModal({ product, onClose }: ProductPreviewModalPro
       {product && (
         <div className="grid grid-cols-1 sm:grid-cols-2 min-h-0">
           {/* ── Left: images ───────────────────────────────────────────── */}
-          <div className="p-6 sm:border-r border-white/10">
+          <div className="p-6 sm:border-r border-gray-200">
             <ImageCarousel images={product.images} alt={product.name} />
           </div>
 
           {/* ── Right: info ────────────────────────────────────────────── */}
-          <div className="p-6 flex flex-col gap-5 border-t sm:border-t-0 border-white/10">
+          <div className="p-6 flex flex-col gap-5 border-t sm:border-t-0 border-gray-200">
             {/* Close + status */}
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-2 flex-wrap">
@@ -45,7 +45,7 @@ export function ProductPreviewModal({ product, onClose }: ProductPreviewModalPro
               </div>
               <button
                 onClick={onClose}
-                className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-colors flex-shrink-0"
+                className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors flex-shrink-0"
                 aria-label="Cerrar"
               >
                 <X size={16} />
@@ -54,27 +54,27 @@ export function ProductPreviewModal({ product, onClose }: ProductPreviewModalPro
 
             {/* SKU + Name */}
             <div>
-              <p className="text-xs text-white/30 uppercase tracking-wider font-mono mb-1">
+              <p className="text-xs text-gray-400 uppercase tracking-wider font-mono mb-1">
                 {product.sku}
               </p>
-              <h2 className="text-xl font-semibold text-white leading-snug">
+              <h2 className="text-xl font-semibold text-gray-900 leading-snug">
                 {product.name}
               </h2>
             </div>
 
             {/* Price */}
-            <p className="text-3xl font-bold text-gold">
+            <p className="text-3xl font-bold text-gray-900">
               {formatCurrency(product.price)}
             </p>
 
             {/* Category */}
             {product.category ? (
-              <div className="flex items-center gap-1.5 text-sm text-white/40">
+              <div className="flex items-center gap-1.5 text-sm text-gray-500">
                 <Tag size={13} className="flex-shrink-0" />
                 <span>{product.category.name}</span>
               </div>
             ) : (
-              <div className="flex items-center gap-1.5 text-sm text-white/25">
+              <div className="flex items-center gap-1.5 text-sm text-gray-400">
                 <Tag size={13} className="flex-shrink-0" />
                 <span>Sin categoría</span>
               </div>
@@ -82,18 +82,18 @@ export function ProductPreviewModal({ product, onClose }: ProductPreviewModalPro
 
             {/* Description */}
             {product.description ? (
-              <p className="text-sm text-white/60 leading-relaxed">
+              <p className="text-sm text-gray-600 leading-relaxed">
                 {product.description}
               </p>
             ) : (
-              <p className="text-sm text-white/25 italic">Sin descripción</p>
+              <p className="text-sm text-gray-400 italic">Sin descripción</p>
             )}
 
-            <div className="border-t border-white/10" />
+            <div className="border-t border-gray-200" />
 
             {/* Stock */}
             <div className="flex items-center justify-between">
-              <span className="text-sm text-white/40">Stock disponible</span>
+              <span className="text-sm text-gray-500">Stock disponible</span>
               <div className="flex items-center gap-1.5">
                 <ShoppingBag
                   size={13}
@@ -113,8 +113,8 @@ export function ProductPreviewModal({ product, onClose }: ProductPreviewModalPro
 
             {/* Images count */}
             <div className="flex items-center justify-between">
-              <span className="text-sm text-white/40">Imágenes cargadas</span>
-              <span className="text-sm text-white/60">
+              <span className="text-sm text-gray-500">Imágenes cargadas</span>
+              <span className="text-sm text-gray-600">
                 {product.images.length} {product.images.length === 1 ? 'foto' : 'fotos'}
               </span>
             </div>

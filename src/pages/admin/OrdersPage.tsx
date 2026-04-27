@@ -58,9 +58,9 @@ const COLUMNS: Column<OrderWithDetails>[] = [
     sortField: 'order_number',
     render: (order) => (
       <div className="flex items-center gap-2 flex-wrap">
-        <span className="font-medium text-white">#{order.order_number}</span>
+        <span className="font-medium text-gray-900">#{order.order_number}</span>
         {order.order_type === 'customer' && (
-          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-info/15 text-info uppercase tracking-wide">
+          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-500 uppercase tracking-wide">
             Cliente
           </span>
         )}
@@ -71,7 +71,7 @@ const COLUMNS: Column<OrderWithDetails>[] = [
     key: 'person',
     header: 'Vendedor / Cliente',
     render: (order) => (
-      <span className="text-white/60">
+      <span className="text-gray-500">
         {order.order_type === 'customer'
           ? (order.customer_name ?? '—')
           : (order.seller?.full_name ?? '—')}
@@ -83,7 +83,7 @@ const COLUMNS: Column<OrderWithDetails>[] = [
     header: 'Tienda',
     sortField: 'store_name',
     render: (order) => (
-      <span className="text-white/60 max-w-[140px] truncate block">{order.store_name}</span>
+      <span className="text-gray-500 max-w-[140px] truncate block">{order.store_name}</span>
     ),
   },
   {
@@ -100,7 +100,7 @@ const COLUMNS: Column<OrderWithDetails>[] = [
     header: 'Total',
     sortField: 'total_amount',
     render: (order) => (
-      <span className="text-gold font-semibold">{formatCurrency(order.total_amount)}</span>
+      <span className="text-gray-900 font-semibold">{formatCurrency(order.total_amount)}</span>
     ),
   },
   {
@@ -113,7 +113,7 @@ const COLUMNS: Column<OrderWithDetails>[] = [
     header: 'Fecha',
     sortField: 'created_at',
     render: (order) => (
-      <span className="text-white/40 text-xs">{formatDate(order.created_at)}</span>
+      <span className="text-gray-400 text-xs">{formatDate(order.created_at)}</span>
     ),
   },
 ]
@@ -159,7 +159,7 @@ export function AdminOrdersPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold text-white mb-6">Pedidos</h1>
+      <h1 className="text-2xl font-semibold text-gray-900 mb-6">Pedidos</h1>
 
       <DataTable<OrderWithDetails>
         data={table.paginatedData}

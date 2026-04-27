@@ -20,16 +20,16 @@ export function RecentOrdersList({ orders }: RecentOrdersListProps) {
         action={
           <button
             onClick={() => navigate('/admin/orders')}
-            className="text-xs text-gold hover:text-gold/80 transition-colors"
+            className="text-xs text-gray-500 hover:text-gray-700 transition-colors"
           >
             Ver todos →
           </button>
         }
       />
       {orders.length === 0 ? (
-        <p className="text-sm text-white/30 text-center py-4">Sin pedidos aún</p>
+        <p className="text-sm text-gray-400 text-center py-4">Sin pedidos aún</p>
       ) : (
-        <div className="flex flex-col divide-y divide-white/[0.06]">
+        <div className="flex flex-col divide-y divide-gray-100">
           {orders.map((order) => {
             const name =
               order.order_type === 'customer'
@@ -43,24 +43,24 @@ export function RecentOrdersList({ orders }: RecentOrdersListProps) {
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
-                    <span className="text-sm font-medium text-white">
+                    <span className="text-sm font-medium text-gray-900">
                       #{order.order_number}
                     </span>
                     {order.order_type === 'customer' && (
-                      <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-info/15 text-info uppercase tracking-wide">
+                      <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-50 text-blue-500 uppercase tracking-wide">
                         Cliente
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-white/40 truncate">{name}</p>
+                  <p className="text-xs text-gray-500 truncate">{name}</p>
                 </div>
                 <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                  <span className="text-sm font-semibold text-gold">
+                  <span className="text-sm font-semibold text-gray-900">
                     {formatCurrency(order.total_amount)}
                   </span>
                   <div className="flex items-center gap-1.5">
                     <StatusBadge status={order.status} className="text-[10px] px-1.5 py-0.5" />
-                    <span className="text-[10px] text-white/25">
+                    <span className="text-[10px] text-gray-400">
                       {formatRelative(order.created_at)}
                     </span>
                   </div>

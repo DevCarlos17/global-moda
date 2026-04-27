@@ -45,7 +45,7 @@ const COLUMNS: Column<OrderListItem>[] = [
     header: 'Pedido',
     sortField: 'order_number',
     render: (order) => (
-      <span className="font-medium text-white">#{order.order_number}</span>
+      <span className="font-medium text-gray-900">#{order.order_number}</span>
     ),
   },
   {
@@ -53,7 +53,7 @@ const COLUMNS: Column<OrderListItem>[] = [
     header: 'Tienda',
     sortField: 'store_name',
     render: (order) => (
-      <span className="text-white/60 max-w-[140px] truncate block">{order.store_name}</span>
+      <span className="text-gray-500 max-w-[140px] truncate block">{order.store_name}</span>
     ),
   },
   {
@@ -75,12 +75,12 @@ const COLUMNS: Column<OrderListItem>[] = [
     key: 'container',
     header: 'Container',
     render: (order) => {
-      if (!order.container) return <span className="text-white/20 text-xs">—</span>
+      if (!order.container) return <span className="text-gray-300 text-xs">—</span>
       return (
         <div className="flex items-center gap-1.5 flex-wrap">
-          <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-info/10 border border-info/15">
-            <Ship size={10} className="text-info/70 flex-shrink-0" />
-            <span className="text-[11px] font-medium text-info/80">
+          <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-blue-50 border border-blue-100">
+            <Ship size={10} className="text-blue-400 flex-shrink-0" />
+            <span className="text-[11px] font-medium text-blue-500">
               {order.container.container_number}
             </span>
           </div>
@@ -94,7 +94,7 @@ const COLUMNS: Column<OrderListItem>[] = [
     header: 'Total',
     sortField: 'total_amount',
     render: (order) => (
-      <span className="text-gold font-semibold">{formatCurrency(order.total_amount)}</span>
+      <span className="text-gray-900 font-semibold">{formatCurrency(order.total_amount)}</span>
     ),
   },
   {
@@ -107,7 +107,7 @@ const COLUMNS: Column<OrderListItem>[] = [
     header: 'Fecha',
     sortField: 'created_at',
     render: (order) => (
-      <span className="text-white/40 text-xs">{formatDate(order.created_at)}</span>
+      <span className="text-gray-400 text-xs">{formatDate(order.created_at)}</span>
     ),
   },
 ]
@@ -139,7 +139,7 @@ export function OrdersPage() {
 
   return (
     <div className="p-4 md:p-6">
-      <h1 className="text-2xl font-semibold text-white mb-6">Mis Pedidos</h1>
+      <h1 className="text-2xl font-semibold text-gray-900 mb-6">Mis Pedidos</h1>
 
       <DataTable<OrderListItem>
         data={table.paginatedData}

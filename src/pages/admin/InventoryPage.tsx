@@ -85,14 +85,14 @@ const COLUMNS: Column<InventoryProduct>[] = [
           <img
             src={p.images[0]}
             alt={p.name}
-            className="size-9 rounded-lg object-cover bg-white/5 flex-shrink-0"
+            className="size-9 rounded-lg object-cover bg-gray-100 flex-shrink-0"
           />
         ) : (
-          <div className="size-9 rounded-lg bg-white/5 flex-shrink-0" />
+          <div className="size-9 rounded-lg bg-gray-100 flex-shrink-0" />
         )}
         <div className="min-w-0">
-          <p className="text-white font-medium truncate">{p.name}</p>
-          <p className="text-[10px] text-white/30">{p.sku}</p>
+          <p className="text-gray-900 font-medium truncate">{p.name}</p>
+          <p className="text-[10px] text-gray-400">{p.sku}</p>
         </div>
       </div>
     ),
@@ -102,15 +102,15 @@ const COLUMNS: Column<InventoryProduct>[] = [
     header: 'Categoría',
     sortField: 'category_name',
     render: (p) => (
-      <span className="text-white/50 text-xs">{p.category_name ?? <span className="text-white/20">—</span>}</span>
+      <span className="text-gray-500 text-xs">{p.category_name ?? <span className="text-gray-300">—</span>}</span>
     ),
   },
   {
     key: 'variants',
     header: 'Variantes',
     render: (p) => (
-      <span className="text-white/50 text-xs">
-        {p.variants.length > 0 ? `${p.variants.length} variante${p.variants.length !== 1 ? 's' : ''}` : <span className="text-white/20">—</span>}
+      <span className="text-gray-500 text-xs">
+        {p.variants.length > 0 ? `${p.variants.length} variante${p.variants.length !== 1 ? 's' : ''}` : <span className="text-gray-300">—</span>}
       </span>
     ),
   },
@@ -124,7 +124,7 @@ const COLUMNS: Column<InventoryProduct>[] = [
     key: 'price',
     header: 'Precio',
     sortField: 'price',
-    render: (p) => <span className="text-gold font-semibold">{formatCurrency(p.price)}</span>,
+    render: (p) => <span className="text-gray-900 font-semibold">{formatCurrency(p.price)}</span>,
   },
   {
     key: 'status',
@@ -135,7 +135,7 @@ const COLUMNS: Column<InventoryProduct>[] = [
           Activo
         </span>
       ) : (
-        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-white/10 text-white/40">
+        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-500">
           Inactivo
         </span>
       ),
@@ -144,7 +144,7 @@ const COLUMNS: Column<InventoryProduct>[] = [
     key: 'actions',
     header: '',
     render: (p) => (
-      <span className="text-xs text-white/30 hover:text-white/60 transition-colors">
+      <span className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
         Ajustar stock →
       </span>
     ),
@@ -190,7 +190,7 @@ export function InventoryPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-semibold text-white">Inventario</h1>
+      <h1 className="text-2xl font-semibold text-gray-900">Inventario</h1>
 
       {/* Low stock warning banner */}
       {lowStockCount > 0 && (

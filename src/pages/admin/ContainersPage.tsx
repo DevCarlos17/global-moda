@@ -46,8 +46,8 @@ export function ContainersPage() {
       sortField: 'container_number',
       render: (c) => (
         <div className="flex items-center gap-2">
-          <Ship size={14} className="text-white/30 flex-shrink-0" />
-          <span className="font-medium text-white">{c.container_number}</span>
+          <Ship size={14} className="text-gray-300 flex-shrink-0" />
+          <span className="font-medium text-gray-900">{c.container_number}</span>
           {c.order_window_open && (
             <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-success/15 text-success uppercase tracking-wide">
               Ventana abierta
@@ -60,13 +60,13 @@ export function ContainersPage() {
       key: 'supplier',
       header: 'Proveedor',
       sortField: 'supplier',
-      render: (c) => <span className="text-white/70">{c.supplier}</span>,
+      render: (c) => <span className="text-gray-600">{c.supplier}</span>,
     },
     {
       key: 'origin_country',
       header: 'País',
       sortField: 'origin_country',
-      render: (c) => <span className="text-white/50 text-xs">{c.origin_country}</span>,
+      render: (c) => <span className="text-gray-500 text-xs">{c.origin_country}</span>,
     },
     {
       key: 'status',
@@ -78,7 +78,7 @@ export function ContainersPage() {
       header: 'ETD',
       sortField: 'etd',
       render: (c) => (
-        <span className="text-white/40 text-xs">{c.etd ? formatDate(c.etd) : '—'}</span>
+        <span className="text-gray-400 text-xs">{c.etd ? formatDate(c.etd) : '—'}</span>
       ),
     },
     {
@@ -86,7 +86,7 @@ export function ContainersPage() {
       header: 'ETA',
       sortField: 'eta',
       render: (c) => (
-        <span className="text-white/40 text-xs">{c.eta ? formatDate(c.eta) : '—'}</span>
+        <span className="text-gray-400 text-xs">{c.eta ? formatDate(c.eta) : '—'}</span>
       ),
     },
     {
@@ -98,7 +98,7 @@ export function ContainersPage() {
             e.stopPropagation()
             setContainerToDelete(c)
           }}
-          className="p-1.5 rounded-lg text-white/30 hover:text-error hover:bg-error/10 transition-colors"
+          className="p-1.5 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors"
           aria-label="Eliminar container"
         >
           <Trash2 size={14} />
@@ -140,8 +140,7 @@ export function ContainersPage() {
       {/* Header */}
       <div className="flex items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-2.5">
-          <Ship size={20} className="text-gold" />
-          <h1 className="text-2xl font-semibold text-white">Containers</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">Containers</h1>
         </div>
         <Button size="sm" onClick={handleNewClick}>
           <Plus size={14} />
@@ -183,9 +182,9 @@ export function ContainersPage() {
         title="Eliminar container"
         size="sm"
       >
-        <p className="text-sm text-white/70 mb-6">
+        <p className="text-sm text-gray-500 mb-6">
           ¿Estás seguro que querés eliminar el container{' '}
-          <span className="font-semibold text-white">
+          <span className="font-semibold text-gray-900">
             {containerToDelete?.container_number}
           </span>
           ? Esta acción no se puede deshacer.

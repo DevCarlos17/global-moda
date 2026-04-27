@@ -19,27 +19,27 @@ const COLUMNS: Column<Profile>[] = [
     header: 'Nombre',
     sortField: 'full_name',
     render: (user) => (
-      <span className="font-medium text-white">{user.full_name}</span>
+      <span className="font-medium text-gray-900">{user.full_name}</span>
     ),
   },
   {
     key: 'email',
     header: 'Email',
     sortField: 'email',
-    render: (user) => <span className="text-white/60">{user.email}</span>,
+    render: (user) => <span className="text-gray-500">{user.email}</span>,
   },
   {
     key: 'phone',
     header: 'Teléfono',
     render: (user) => (
-      <span className="text-white/60">{user.phone ?? '—'}</span>
+      <span className="text-gray-500">{user.phone ?? '—'}</span>
     ),
   },
   {
     key: 'role',
     header: 'Rol',
     render: (user) => (
-      <Badge variant={user.role === 'admin' ? 'gold' : 'info'}>
+      <Badge variant={user.role === 'admin' ? 'default' : 'info'}>
         {user.role === 'admin' ? 'Admin' : 'Vendedor'}
       </Badge>
     ),
@@ -49,7 +49,7 @@ const COLUMNS: Column<Profile>[] = [
     header: 'Desde',
     sortField: 'created_at',
     render: (user) => (
-      <span className="text-white/40 text-xs">{formatDate(user.created_at)}</span>
+      <span className="text-gray-400 text-xs">{formatDate(user.created_at)}</span>
     ),
   },
 ]
@@ -84,7 +84,7 @@ export function SellersPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold text-white">Usuarios</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">Usuarios</h1>
         <Button onClick={() => setShowModal(true)} size="sm">
           <Plus size={16} />
           Nuevo usuario
@@ -100,14 +100,14 @@ export function SellersPage() {
             className={cn(
               'px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors',
               roleFilter === f.value
-                ? 'border-white/40 text-white bg-white/10'
-                : 'border-white/10 text-white/50 hover:text-white hover:border-white/25',
+                ? 'border-gray-900 text-gray-900 bg-gray-100'
+                : 'border-gray-200 text-gray-500 hover:text-gray-900 hover:border-gray-300',
             )}
           >
             {f.label}
             <span className={cn(
               'ml-1.5 text-[10px]',
-              roleFilter === f.value ? 'text-white/60' : 'text-white/30',
+              roleFilter === f.value ? 'text-gray-500' : 'text-gray-400',
             )}>
               {f.value === 'all'
                 ? allUsers.length

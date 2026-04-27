@@ -9,7 +9,7 @@ interface OrderStatusChartProps {
 const STATUS_CONFIG = [
   { key: 'pending' as const, label: 'Pendiente', color: 'bg-warning' },
   { key: 'confirmed' as const, label: 'Confirmado', color: 'bg-info' },
-  { key: 'processing' as const, label: 'En proceso', color: 'bg-gold' },
+  { key: 'processing' as const, label: 'En proceso', color: 'bg-gray-700' },
   { key: 'shipped' as const, label: 'Enviado', color: 'bg-purple-400' },
   { key: 'delivered' as const, label: 'Entregado', color: 'bg-success' },
   { key: 'cancelled' as const, label: 'Cancelado', color: 'bg-error' },
@@ -37,7 +37,7 @@ export function OrderStatusChart({ statusCounts, total }: OrderStatusChartProps)
             />
           )
         })}
-        {activeTotal === 0 && <div className="bg-white/10 w-full" />}
+        {activeTotal === 0 && <div className="bg-gray-100 w-full" />}
       </div>
 
       {/* Legend */}
@@ -48,12 +48,12 @@ export function OrderStatusChart({ statusCounts, total }: OrderStatusChartProps)
           return (
             <div key={s.key} className="flex items-center gap-2">
               <div className={`size-2 rounded-full flex-shrink-0 ${s.color}`} />
-              <span className="text-xs text-white/50 truncate">{s.label}</span>
-              <span className="text-xs font-medium text-white ml-auto tabular-nums">
+              <span className="text-xs text-gray-500 truncate">{s.label}</span>
+              <span className="text-xs font-medium text-gray-900 ml-auto tabular-nums">
                 {count}
               </span>
               {count > 0 && (
-                <span className="text-[10px] text-white/25 tabular-nums">({pct}%)</span>
+                <span className="text-[10px] text-gray-400 tabular-nums">({pct}%)</span>
               )}
             </div>
           )

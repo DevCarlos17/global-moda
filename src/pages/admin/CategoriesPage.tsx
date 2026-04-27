@@ -1,4 +1,3 @@
-import { Layers } from 'lucide-react'
 import { CategoryManager } from '@/features/categories/components/CategoryManager'
 import { CategoryTreePreview } from '@/features/categories/components/CategoryTreePreview'
 import { useCategoryTree } from '@/features/categories/hooks/useCategories'
@@ -15,18 +14,17 @@ export function CategoriesPage() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5 mb-1">
-            <Layers size={20} className="text-gold" />
-            <h1 className="text-2xl font-semibold text-white">Categorías</h1>
+            <h1 className="text-2xl font-semibold text-gray-900">Categorías</h1>
           </div>
-          <p className="text-sm text-white/40">
+          <p className="text-sm text-gray-500">
             Organizá los productos en categorías y subcategorías para facilitar la navegación del catálogo
           </p>
         </div>
 
         {totalCount > 0 && (
           <div className="flex-shrink-0 text-right">
-            <p className="text-2xl font-bold text-white">{totalCount}</p>
-            <p className="text-xs text-white/40">
+            <p className="text-2xl font-bold text-gray-900">{totalCount}</p>
+            <p className="text-xs text-gray-500">
               {totalCount === 1 ? 'categoría' : 'categorías'}
             </p>
           </div>
@@ -35,11 +33,11 @@ export function CategoriesPage() {
 
       {/* Tip banner — only when empty */}
       {tree.length === 0 && (
-        <div className="bg-gold/5 border border-gold/20 rounded-xl px-4 py-3 flex items-start gap-3">
-          <span className="text-gold mt-0.5 flex-shrink-0">💡</span>
-          <p className="text-xs text-white/60 leading-relaxed">
-            Empezá creando las categorías principales (ej: <span className="text-white/80">Ropa</span>, <span className="text-white/80">Calzado</span>)
-            y luego agregá subcategorías dentro de ellas (ej: <span className="text-white/80">Camisas</span>, <span className="text-white/80">Pantalones</span>).
+        <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 flex items-start gap-3">
+          <span className="text-amber-500 mt-0.5 flex-shrink-0">💡</span>
+          <p className="text-xs text-gray-500 leading-relaxed">
+            Empezá creando las categorías principales (ej: <span className="text-gray-700">Ropa</span>, <span className="text-gray-700">Calzado</span>)
+            y luego agregá subcategorías dentro de ellas (ej: <span className="text-gray-700">Camisas</span>, <span className="text-gray-700">Pantalones</span>).
           </p>
         </div>
       )}

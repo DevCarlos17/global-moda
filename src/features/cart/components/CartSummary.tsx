@@ -21,9 +21,9 @@ export function CartSummary() {
 
   return (
     <div className="p-6 flex flex-col gap-4">
-      <div className="flex justify-between text-sm text-white/60">
+      <div className="flex justify-between text-sm text-gray-500">
         <span>{itemCount} {itemCount === 1 ? 'producto' : 'productos'}</span>
-        <span className="text-white font-semibold">{formatCurrency(subtotal)}</span>
+        <span className="text-gray-900 font-semibold">{formatCurrency(subtotal)}</span>
       </div>
       <Button className="w-full" onClick={handleCheckout}>
         Revisar pedido
