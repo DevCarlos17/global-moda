@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { ReactNode } from 'react'
 import { NavLink } from 'react-router-dom'
 import {
@@ -7,6 +8,7 @@ import {
   Tag,
   Users,
   Ship,
+  Store,
   X,
 } from 'lucide-react'
 import { useUIStore } from '@/store/uiStore'
@@ -26,10 +28,12 @@ interface NavSection {
 }
 
 export function Sidebar() {
-  const sidebarOpen = useUIStore((s) => s.sidebarOpen)
+  const [hovered, setHovered] = useState(false)
   const mobileMenuOpen = useUIStore((s) => s.mobileMenuOpen)
   const setMobileMenuOpen = useUIStore((s) => s.setMobileMenuOpen)
   const { data: pendingCount = 0 } = usePendingOrdersCount()
+
+  const isExpanded = hovered
 
   const sections: NavSection[] = [
     {
@@ -49,6 +53,7 @@ export function Sidebar() {
         { to: '/admin/products', icon: <Package size={18} />, label: 'Productos' },
         { to: '/admin/categories', icon: <Tag size={18} />, label: 'Categorías' },
         { to: '/admin/containers', icon: <Ship size={18} />, label: 'Containers' },
+        { to: '/catalog', icon: <Store size={18} />, label: 'Catálogo' },
       ],
     },
     {
@@ -64,7 +69,7 @@ export function Sidebar() {
       {/* Mobile overlay */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 bg-black/60 z-40 md:hidden"
+          className="fixed inset-0 bg-[#0a0a0a]/50 z-40 md:hidden"
           onClick={() => setMobileMenuOpen(false)}
           aria-hidden="true"
         />
@@ -72,28 +77,36 @@ export function Sidebar() {
 
       {/* Sidebar */}
       <aside
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
         className={cn(
-          'fixed left-0 top-0 h-full z-40 bg-surface',
-          'flex flex-col transition-all duration-300',
-          sidebarOpen ? 'md:w-56' : 'md:w-16',
+          'fixed left-0 top-0 h-full z-40 bg-white border-r border-gray-200',
+          'flex flex-col overflow-hidden',
+          'transition-[width] duration-200 ease-in-out',
+          // Desktop: collapsed by default, expands on hover
+          isExpanded ? 'md:w-56' : 'md:w-16',
+          // Mobile: always full width, shown/hidden via translate
           'w-56',
           mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
         )}
       >
         {/* Header — aligned with navbar height */}
-        <div className="h-16 flex items-center justify-between px-4 flex-shrink-0">
-          {sidebarOpen ? (
-            <span className="text-gold font-bold tracking-widest text-sm uppercase">
-              Global Moda
-            </span>
-          ) : (
-            <span className="text-gold font-bold tracking-widest text-sm uppercase mx-auto">
-              GM
-            </span>
-          )}
+        <div className="h-16 flex items-center px-4 flex-shrink-0 border-b border-gray-200 overflow-hidden">
+          <span className={cn(
+            'font-bold tracking-widest text-sm uppercase text-gray-900 whitespace-nowrap transition-opacity duration-150',
+            isExpanded ? 'opacity-100' : 'opacity-0 md:hidden',
+          )}>
+            Global Moda
+          </span>
+          <span className={cn(
+            'font-bold tracking-widest text-sm uppercase text-gray-900 whitespace-nowrap transition-opacity duration-150 hidden',
+            !isExpanded && 'md:block md:mx-auto',
+          )}>
+            GM
+          </span>
           <button
             onClick={() => setMobileMenuOpen(false)}
-            className="p-1.5 rounded-lg text-white/30 hover:text-white hover:bg-white/10 transition-colors md:hidden"
+            className="ml-auto p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors md:hidden"
             aria-label="Cerrar menú"
           >
             <X size={16} />
@@ -101,50 +114,59 @@ export function Sidebar() {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 py-3 px-2 flex flex-col gap-4 overflow-y-auto">
-          {sections.map((section, si) => (
-            <div key={si} className="flex flex-col gap-0.5">
-              {section.label && sidebarOpen && (
-                <p className="px-3 pb-1 pt-0.5 text-[10px] font-semibold text-white/20 uppercase tracking-widest">
-                  {section.label}
-                </p>
-              )}
-              {section.label && !sidebarOpen && (
-                <div className="mx-3 h-px bg-white/10 mb-1" />
-              )}
-              {section.items.map((item) => (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  end={item.to === '/admin'}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={({ isActive }) =>
-                    cn(
-                      'relative flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors duration-150 text-sm',
-                      isActive
-                        ? 'bg-white/10 text-white'
-                        : 'text-white/40 hover:text-white hover:bg-white/10',
-                    )
-                  }
-                >
-                  <span className="flex-shrink-0">{item.icon}</span>
-                  {sidebarOpen && (
-                    <span className="truncate flex-1 font-medium">{item.label}</span>
-                  )}
-                  {item.badge != null && item.badge > 0 && (
-                    <span
-                      className={cn(
-                        'flex-shrink-0 min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold flex items-center justify-center bg-gold text-black',
-                        !sidebarOpen && 'absolute -top-1 -right-1',
-                      )}
-                    >
-                      {item.badge > 99 ? '99+' : item.badge}
+        <nav className="flex-1 py-3 px-2 flex flex-col overflow-y-auto overflow-x-hidden">
+          {/* Top sections */}
+          <div className="flex flex-col gap-4">
+            {sections.map((section, si) => (
+              <div key={si} className="flex flex-col gap-0.5">
+                {section.label && (
+                  isExpanded ? (
+                    <p className="px-3 pb-1 pt-0.5 text-[10px] font-semibold text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                      {section.label}
+                    </p>
+                  ) : (
+                    <div className="mx-3 h-px bg-gray-200 mb-1" />
+                  )
+                )}
+                {section.items.map((item) => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    end={item.to === '/admin'}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={({ isActive }) =>
+                      cn(
+                        'relative flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors duration-150 text-sm',
+                        isActive
+                          ? 'bg-gray-100 text-gray-900'
+                          : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50',
+                      )
+                    }
+                  >
+                    <span className="flex-shrink-0">{item.icon}</span>
+                    <span className={cn(
+                      'truncate flex-1 font-medium whitespace-nowrap transition-opacity duration-150',
+                      isExpanded ? 'opacity-100' : 'opacity-0 w-0',
+                    )}>
+                      {item.label}
                     </span>
-                  )}
-                </NavLink>
-              ))}
-            </div>
-          ))}
+                    {item.badge != null && item.badge > 0 && (
+                      <span
+                        className={cn(
+                          'flex-shrink-0 min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold flex items-center justify-center bg-gray-900 text-white whitespace-nowrap transition-opacity duration-150',
+                          !isExpanded && 'absolute -top-1 -right-1',
+                          isExpanded ? 'opacity-100' : 'opacity-0 md:opacity-100',
+                        )}
+                      >
+                        {item.badge > 99 ? '99+' : item.badge}
+                      </span>
+                    )}
+                  </NavLink>
+                ))}
+              </div>
+            ))}
+          </div>
+
         </nav>
       </aside>
     </>

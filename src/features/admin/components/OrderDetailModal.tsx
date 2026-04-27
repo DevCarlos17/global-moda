@@ -60,16 +60,16 @@ export function OrderDetailModal({ order, onClose }: OrderDetailModalProps) {
       className="max-h-[90vh] flex flex-col overflow-hidden"
     >
       {/* Header */}
-      <div className="flex items-start justify-between gap-4 p-6 border-b border-white/10 flex-shrink-0">
+      <div className="flex items-start justify-between gap-4 p-6 border-b border-gray-200 flex-shrink-0">
         <div className="flex items-center gap-3 flex-wrap">
-          <h2 className="text-lg font-semibold text-white">#{order.order_number}</h2>
+          <h2 className="text-lg font-semibold text-gray-900">#{order.order_number}</h2>
           <StatusBadge status={order.status} />
           {order.order_type === 'customer' ? (
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-info/15 text-info uppercase tracking-wide">
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-500 uppercase tracking-wide">
               Cliente
             </span>
           ) : (
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-white/10 text-white/60 uppercase tracking-wide">
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-gray-100 text-gray-500 uppercase tracking-wide">
               Vendedor
             </span>
           )}
@@ -81,7 +81,7 @@ export function OrderDetailModal({ order, onClose }: OrderDetailModalProps) {
         </div>
         <button
           onClick={onClose}
-          className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-colors flex-shrink-0"
+          className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors flex-shrink-0"
           aria-label="Cerrar"
         >
           <X size={16} />
@@ -92,7 +92,7 @@ export function OrderDetailModal({ order, onClose }: OrderDetailModalProps) {
       <div className="overflow-y-auto flex-1 p-6 flex flex-col gap-6">
         {/* Order info */}
         <section>
-          <p className="text-[10px] font-semibold text-white/30 uppercase tracking-widest mb-3">
+          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3">
             Información del pedido
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -114,10 +114,10 @@ export function OrderDetailModal({ order, onClose }: OrderDetailModalProps) {
 
         {/* Seller / Customer info */}
         <section>
-          <p className="text-[10px] font-semibold text-white/30 uppercase tracking-widest mb-3">
+          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3">
             {order.order_type === 'seller' ? 'Vendedor' : 'Cliente'}
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 bg-white/[0.03] rounded-xl border border-white/[0.06]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 bg-gray-50 rounded-xl border border-gray-200">
             {order.order_type === 'seller' && order.seller ? (
               <>
                 <InfoRow icon={<User size={13} />} label="Nombre" value={order.seller.full_name} />
@@ -139,7 +139,7 @@ export function OrderDetailModal({ order, onClose }: OrderDetailModalProps) {
                 )}
               </>
             ) : (
-              <p className="text-sm text-white/30">Sin información de contacto</p>
+              <p className="text-sm text-gray-400">Sin información de contacto</p>
             )}
           </div>
         </section>
@@ -154,19 +154,19 @@ export function OrderDetailModal({ order, onClose }: OrderDetailModalProps) {
             {(stockCount > 0 || containerCount > 0) && (
               <div className="flex items-center gap-2">
                 {stockCount > 0 && (
-                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-success/10 text-success">
+                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-green-50 text-green-600">
                     <Warehouse size={10} />
                     {stockCount} en stock
                   </span>
                 )}
                 {containerCount > 0 && (
-                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-info/10 text-info">
+                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-50 text-blue-500">
                     <Ship size={10} />
                     {containerCount} container
                   </span>
                 )}
                 {unsetCount > 0 && (
-                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/10 text-white/40">
+                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gray-100 text-gray-500">
                     <Package size={10} />
                     {unsetCount} sin definir
                   </span>
@@ -187,9 +187,9 @@ export function OrderDetailModal({ order, onClose }: OrderDetailModalProps) {
           </div>
 
           {/* Total */}
-          <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/10">
-            <span className="text-sm font-medium text-white/60">Total</span>
-            <span className="text-xl font-bold text-gold">
+          <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-200">
+            <span className="text-sm font-medium text-gray-500">Total</span>
+            <span className="text-xl font-bold text-gray-900">
               {formatCurrency(order.total_amount)}
             </span>
           </div>
@@ -198,14 +198,14 @@ export function OrderDetailModal({ order, onClose }: OrderDetailModalProps) {
         {/* Container info */}
         {order.container && (
           <section>
-            <p className="text-[10px] font-semibold text-white/30 uppercase tracking-widest mb-3">
+            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3">
               Container asociado
             </p>
-            <div className="p-4 bg-white/[0.03] rounded-xl border border-white/[0.06] flex flex-col gap-3">
+            <div className="p-4 bg-gray-50 rounded-xl border border-gray-200 flex flex-col gap-3">
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
-                  <Ship size={14} className="text-white/40" />
-                  <span className="text-sm font-medium text-white">
+                  <Ship size={14} className="text-gray-400" />
+                  <span className="text-sm font-medium text-gray-900">
                     {order.container.container_number}
                   </span>
                 </div>
@@ -213,17 +213,17 @@ export function OrderDetailModal({ order, onClose }: OrderDetailModalProps) {
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
                 <div>
-                  <p className="text-white/30 uppercase tracking-wider text-[10px]">Proveedor</p>
-                  <p className="text-white/70 mt-0.5">{order.container.supplier}</p>
+                  <p className="text-gray-400 uppercase tracking-wider text-[10px]">Proveedor</p>
+                  <p className="text-gray-600 mt-0.5">{order.container.supplier}</p>
                 </div>
                 <div>
-                  <p className="text-white/30 uppercase tracking-wider text-[10px]">Origen</p>
-                  <p className="text-white/70 mt-0.5">{order.container.origin_country}</p>
+                  <p className="text-gray-400 uppercase tracking-wider text-[10px]">Origen</p>
+                  <p className="text-gray-600 mt-0.5">{order.container.origin_country}</p>
                 </div>
                 {order.container.eta && (
                   <div>
-                    <p className="text-white/30 uppercase tracking-wider text-[10px]">ETA</p>
-                    <p className="text-white/70 mt-0.5">{formatDate(order.container.eta)}</p>
+                    <p className="text-gray-400 uppercase tracking-wider text-[10px]">ETA</p>
+                    <p className="text-gray-600 mt-0.5">{formatDate(order.container.eta)}</p>
                   </div>
                 )}
               </div>
@@ -237,17 +237,17 @@ export function OrderDetailModal({ order, onClose }: OrderDetailModalProps) {
 
       {/* Sticky footer — always visible regardless of scroll position */}
       {order.container && containerCount > 0 ? (
-        <div className="flex-shrink-0 border-t border-white/10 px-6 py-4 flex items-center gap-3">
-          <Ship size={13} className="text-info/50 flex-shrink-0" />
-          <p className="text-xs text-white/40 flex-1">
+        <div className="flex-shrink-0 border-t border-gray-200 px-6 py-4 flex items-center gap-3">
+          <Ship size={13} className="text-blue-400 flex-shrink-0" />
+          <p className="text-xs text-gray-500 flex-1">
             Estado gestionado automáticamente por el container{' '}
-            <span className="text-info/70 font-medium">{order.container.container_number}</span>
+            <span className="text-blue-500 font-medium">{order.container.container_number}</span>
           </p>
           <StatusBadge status={order.status} />
         </div>
       ) : (
-        <div className="flex-shrink-0 border-t border-white/10 px-6 py-4 flex items-center gap-3">
-          <p className="text-[10px] font-semibold text-white/30 uppercase tracking-widest flex-shrink-0">
+        <div className="flex-shrink-0 border-t border-gray-200 px-6 py-4 flex items-center gap-3">
+          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest flex-shrink-0">
             Estado
           </p>
           <div className="flex-1">
@@ -285,20 +285,20 @@ function ItemRow({
   const source = item.fulfillment_source
 
   return (
-    <div className="flex items-center gap-3 p-3 bg-white/[0.03] rounded-xl border border-white/[0.06]">
+    <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-200">
       {item.product.images?.[0] ? (
         <img
           src={item.product.images[0]}
           alt={item.product.name}
-          className="size-12 rounded-lg object-cover bg-white/5 flex-shrink-0"
+          className="size-12 rounded-lg object-cover bg-gray-100 flex-shrink-0"
         />
       ) : (
-        <div className="size-12 rounded-lg bg-white/5 flex-shrink-0" />
+        <div className="size-12 rounded-lg bg-gray-100 flex-shrink-0" />
       )}
 
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-white truncate">{item.product.name}</p>
-        <p className="text-xs text-white/40">
+        <p className="text-sm font-medium text-gray-900 truncate">{item.product.name}</p>
+        <p className="text-xs text-gray-400">
           {item.quantity} × {formatCurrency(item.unit_price)}
         </p>
       </div>
@@ -325,7 +325,7 @@ function ItemRow({
         />
       </div>
 
-      <span className="text-sm font-semibold text-gold flex-shrink-0 w-20 text-right">
+      <span className="text-sm font-semibold text-gray-900 flex-shrink-0 w-20 text-right">
         {formatCurrency(item.subtotal)}
       </span>
     </div>
@@ -352,7 +352,7 @@ function SourceButton({
         'flex items-center gap-1 px-2 h-6 rounded-md border text-[10px] font-semibold transition-colors',
         active
           ? activeClass
-          : 'border-white/10 text-white/30 hover:text-white/60 hover:border-white/20',
+          : 'border-gray-200 text-gray-400 hover:text-gray-600 hover:border-gray-300',
       )}
     >
       {icon}
@@ -372,10 +372,10 @@ function InfoRow({
 }) {
   return (
     <div className="flex items-start gap-2">
-      <span className="text-white/30 mt-0.5 flex-shrink-0">{icon}</span>
+      <span className="text-gray-400 mt-0.5 flex-shrink-0">{icon}</span>
       <div className="min-w-0">
-        <p className="text-[10px] text-white/30 uppercase tracking-wider">{label}</p>
-        <p className="text-sm text-white truncate">{value}</p>
+        <p className="text-[10px] text-gray-400 uppercase tracking-wider">{label}</p>
+        <p className="text-sm text-gray-900 truncate">{value}</p>
       </div>
     </div>
   )

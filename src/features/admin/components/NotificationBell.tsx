@@ -19,9 +19,9 @@ function timeAgo(timestamp: string): string {
 }
 
 const TYPE_CONFIG: Record<NotificationType, { icon: typeof Bell; color: string; bg: string }> = {
-  order:     { icon: ClipboardList, color: 'text-gold',    bg: 'bg-gold/10' },
-  preorder:  { icon: Ship,          color: 'text-info',    bg: 'bg-info/10' },
-  container: { icon: Ship,          color: 'text-success', bg: 'bg-success/10' },
+  order:     { icon: ClipboardList, color: 'text-gray-700', bg: 'bg-gray-100' },
+  preorder:  { icon: Ship,          color: 'text-info',     bg: 'bg-info/10' },
+  container: { icon: Ship,          color: 'text-success',  bg: 'bg-success/10' },
 }
 
 // ─── NotificationItem ─────────────────────────────────────────────────────────
@@ -40,7 +40,7 @@ function NotificationItem({
   return (
     <button
       onClick={onClick}
-      className="w-full flex items-start gap-3 px-4 py-3 hover:bg-white/[0.04] transition-colors text-left"
+      className="w-full flex items-start gap-3 px-4 py-3 hover:bg-gray-50 transition-colors text-left"
     >
       {/* Icon */}
       <span className={cn('p-1.5 rounded-lg flex-shrink-0 mt-0.5', bg)}>
@@ -53,15 +53,15 @@ function NotificationItem({
           <p
             className={cn(
               'text-sm truncate',
-              isUnread ? 'font-semibold text-white' : 'font-medium text-white/60',
+              isUnread ? 'font-semibold text-gray-900' : 'font-medium text-gray-500',
             )}
           >
             {item.title}
           </p>
-          {isUnread && <span className="size-1.5 rounded-full bg-gold flex-shrink-0" />}
+          {isUnread && <span className="size-1.5 rounded-full bg-gray-900 flex-shrink-0" />}
         </div>
-        <p className="text-xs text-white/40 truncate mt-0.5">{item.description}</p>
-        <p className="text-[10px] text-white/25 mt-1">{timeAgo(item.timestamp)}</p>
+        <p className="text-xs text-gray-500 truncate mt-0.5">{item.description}</p>
+        <p className="text-[10px] text-gray-400 mt-1">{timeAgo(item.timestamp)}</p>
       </div>
     </button>
   )
@@ -106,14 +106,14 @@ export function NotificationBell() {
         className={cn(
           'relative p-2 rounded-lg transition-colors',
           open
-            ? 'text-white bg-white/10'
-            : 'text-white/50 hover:text-white hover:bg-white/10',
+            ? 'text-gray-700 bg-gray-100'
+            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100',
         )}
         aria-label="Notificaciones"
       >
         <Bell size={18} />
         {unreadCount > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center bg-gold text-black text-[10px] font-bold rounded-full leading-none">
+          <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center bg-gray-900 text-white text-[10px] font-bold rounded-full leading-none">
             {unreadCount > 99 ? '99+' : unreadCount}
           </span>
         )}
@@ -121,20 +121,20 @@ export function NotificationBell() {
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-80 bg-surface border border-white/10 rounded-xl shadow-luxury-lg z-50 overflow-hidden">
+        <div className="absolute right-0 top-full mt-2 w-80 bg-white border border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
             <div className="flex items-center gap-2">
-              <p className="text-sm font-semibold text-white">Notificaciones</p>
+              <p className="text-sm font-semibold text-gray-900">Notificaciones</p>
               {notifications.length > 0 && (
-                <span className="px-1.5 py-0.5 rounded-full bg-white/10 text-[10px] font-bold text-white/60">
+                <span className="px-1.5 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold text-gray-500">
                   {notifications.length}
                 </span>
               )}
             </div>
             <button
               onClick={() => setOpen(false)}
-              className="p-1 rounded-lg text-white/30 hover:text-white hover:bg-white/10 transition-colors"
+              className="p-1 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
               aria-label="Cerrar"
             >
               <X size={14} />
@@ -142,12 +142,12 @@ export function NotificationBell() {
           </div>
 
           {/* List */}
-          <div className="max-h-96 overflow-y-auto divide-y divide-white/[0.04]">
+          <div className="max-h-96 overflow-y-auto divide-y divide-gray-100">
             {notifications.length === 0 ? (
               <div className="flex flex-col items-center gap-2.5 py-12 text-center px-4">
-                <Bell size={28} className="text-white/15" />
-                <p className="text-sm text-white/40">Sin notificaciones recientes</p>
-                <p className="text-xs text-white/25">
+                <Bell size={28} className="text-gray-300" />
+                <p className="text-sm text-gray-500">Sin notificaciones recientes</p>
+                <p className="text-xs text-gray-400">
                   Los nuevos pedidos y cambios de container aparecerán aquí
                 </p>
               </div>
@@ -165,14 +165,14 @@ export function NotificationBell() {
 
           {/* Footer */}
           {notifications.length > 0 && (
-            <div className="border-t border-white/10 px-4 py-2.5 flex items-center justify-between">
+            <div className="border-t border-gray-200 px-4 py-2.5 flex items-center justify-between">
               <button
                 onClick={() => { navigate('/admin/orders'); setOpen(false) }}
-                className="text-xs text-white/40 hover:text-white transition-colors"
+                className="text-xs text-gray-500 hover:text-gray-700 transition-colors"
               >
                 Ver todos los pedidos →
               </button>
-              <span className="text-[10px] text-white/20">Últimos 7 días</span>
+              <span className="text-[10px] text-gray-400">Últimos 7 días</span>
             </div>
           )}
         </div>

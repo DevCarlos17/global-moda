@@ -37,7 +37,7 @@ export function ContainerDetailPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <span className="size-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+        <span className="size-6 border-2 border-gray-200 border-t-gray-700 rounded-full animate-spin" />
       </div>
     )
   }
@@ -49,7 +49,7 @@ export function ContainerDetailPage() {
       {/* Back nav */}
       <button
         onClick={() => navigate('/admin/containers')}
-        className="flex items-center gap-2 text-sm text-white/40 hover:text-white transition-colors w-fit"
+        className="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-900 transition-colors w-fit"
       >
         <ArrowLeft size={15} />
         Containers
@@ -58,10 +58,10 @@ export function ContainerDetailPage() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
-          <Ship size={22} className="text-gold flex-shrink-0" />
+          <Ship size={22} className="text-gray-400 flex-shrink-0" />
           <div>
             <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-2xl font-semibold text-white">{container.container_number}</h1>
+              <h1 className="text-2xl font-semibold text-gray-900">{container.container_number}</h1>
               <ContainerStatusBadge status={container.status as ContainerStatus} />
               {container.order_window_open && (
                 <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-success/15 text-success uppercase tracking-wide">
@@ -69,7 +69,7 @@ export function ContainerDetailPage() {
                 </span>
               )}
             </div>
-            <p className="text-sm text-white/40 mt-0.5">{container.supplier}</p>
+            <p className="text-sm text-gray-400 mt-0.5">{container.supplier}</p>
           </div>
         </div>
         <Button size="sm" variant="outline" onClick={() => setEditOpen(true)}>
@@ -119,11 +119,11 @@ export function ContainerDetailPage() {
 
       {/* Tabs */}
       <div>
-        <div className="flex border-b border-white/10 mb-4">
+        <div className="flex border-b border-gray-200 mb-4">
           <TabButton active={activeTab === 'stock'} onClick={() => setActiveTab('stock')}>
             Compra propia{' '}
             {stockItems.length > 0 && (
-              <span className="ml-1.5 px-1.5 py-0.5 rounded-full bg-white/10 text-[10px] font-bold">
+              <span className="ml-1.5 px-1.5 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold">
                 {stockItems.length}
               </span>
             )}
@@ -134,7 +134,7 @@ export function ContainerDetailPage() {
           <TabButton active={activeTab === 'orders'} onClick={() => setActiveTab('orders')}>
             Pedidos incluidos{' '}
             {orders.length > 0 && (
-              <span className="ml-1.5 px-1.5 py-0.5 rounded-full bg-white/10 text-[10px] font-bold">
+              <span className="ml-1.5 px-1.5 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold">
                 {orders.length}
               </span>
             )}
@@ -154,7 +154,7 @@ export function ContainerDetailPage() {
           <div className="flex flex-col gap-3">
             {/* Toolbar */}
             <div className="flex items-center justify-between gap-3">
-              <p className="text-xs text-white/40">
+              <p className="text-xs text-gray-400">
                 {orders.length} pedido{orders.length !== 1 ? 's' : ''} vinculado{orders.length !== 1 ? 's' : ''}
               </p>
               <Button size="sm" variant="outline" onClick={() => setAssignOpen(true)}>
@@ -165,9 +165,9 @@ export function ContainerDetailPage() {
 
             {orders.length === 0 ? (
               <div className="flex flex-col items-center gap-3 py-12 text-center">
-                <Ship size={32} className="text-white/15" />
-                <p className="text-sm text-white/40">No hay pedidos vinculados a este container</p>
-                <p className="text-xs text-white/25">
+                <Ship size={32} className="text-gray-200" />
+                <p className="text-sm text-gray-400">No hay pedidos vinculados a este container</p>
+                <p className="text-xs text-gray-400">
                   Usá el botón "Agregar pedidos" para vincular pre-pedidos existentes
                 </p>
               </div>
@@ -183,7 +183,7 @@ export function ContainerDetailPage() {
                 return (
                   <div
                     key={order.id}
-                    className="flex items-center gap-3 p-4 bg-white/[0.03] border border-white/[0.06] rounded-xl"
+                    className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl hover:border-gray-300 transition-colors"
                   >
                     {/* Clickable info area */}
                     <button
@@ -191,14 +191,14 @@ export function ContainerDetailPage() {
                       className="flex-1 min-w-0 text-left hover:opacity-80 transition-opacity"
                     >
                       <div className="flex items-center gap-2 flex-wrap">
-                        <p className="text-sm font-medium text-white">#{order.order_number}</p>
+                        <p className="text-sm font-medium text-gray-900">#{order.order_number}</p>
                         <StatusBadge status={order.status as OrderStatus} />
                       </div>
-                      <p className="text-xs text-white/40 mt-0.5">
+                      <p className="text-xs text-gray-500 mt-0.5">
                         {order.seller?.full_name ?? order.customer_name ?? '—'}
                       </p>
                       {preorderUnits > 0 && (
-                        <p className="text-[11px] text-info/60 mt-1 flex items-center gap-1">
+                        <p className="text-[11px] text-blue-400 mt-1 flex items-center gap-1">
                           <Ship size={9} />
                           {preorderUnits} u. en {preorderCount} artículo{preorderCount !== 1 ? 's' : ''}
                         </p>
@@ -207,14 +207,14 @@ export function ContainerDetailPage() {
 
                     {/* Amount + unassign */}
                     <div className="flex items-center gap-3 flex-shrink-0">
-                      <span className="text-gold font-semibold text-sm">
+                      <span className="text-gray-900 font-semibold text-sm">
                         {formatCurrency(order.total_amount)}
                       </span>
                       <button
                         onClick={() => unassign(order.id)}
                         disabled={isUnassigning}
                         title="Quitar del container"
-                        className="p-1.5 rounded-lg text-white/25 hover:text-error hover:bg-error/10 transition-colors disabled:opacity-40"
+                        className="p-1.5 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors disabled:opacity-40"
                       >
                         <X size={14} />
                       </button>
@@ -255,11 +255,11 @@ function InfoCard({
   value: string
 }) {
   return (
-    <div className="p-3 bg-white/[0.03] border border-white/[0.06] rounded-xl flex items-start gap-2.5">
-      <span className="text-white/30 mt-0.5 flex-shrink-0">{icon}</span>
+    <div className="p-3 bg-gray-50 border border-gray-200 rounded-xl flex items-start gap-2.5">
+      <span className="text-gray-400 mt-0.5 flex-shrink-0">{icon}</span>
       <div className="min-w-0">
-        <p className="text-[10px] text-white/30 uppercase tracking-wider">{label}</p>
-        <p className="text-sm text-white truncate">{value}</p>
+        <p className="text-[10px] text-gray-400 uppercase tracking-wider">{label}</p>
+        <p className="text-sm text-gray-900 truncate">{value}</p>
       </div>
     </div>
   )
@@ -279,8 +279,8 @@ function TabButton({
       onClick={onClick}
       className={`flex items-center px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
         active
-          ? 'border-white text-white'
-          : 'border-transparent text-white/40 hover:text-white/70'
+          ? 'border-gray-900 text-gray-900'
+          : 'border-transparent text-gray-400 hover:text-gray-600'
       }`}
     >
       {children}

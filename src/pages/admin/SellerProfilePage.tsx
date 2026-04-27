@@ -80,7 +80,7 @@ export function SellerProfilePage() {
     <div>
       <button
         onClick={() => navigate('/admin/sellers')}
-        className="flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-6"
+        className="flex items-center gap-2 text-gray-400 hover:text-gray-900 transition-colors mb-6"
       >
         <ArrowLeft size={16} />
         <span className="text-sm">Volver a usuarios</span>
@@ -88,8 +88,8 @@ export function SellerProfilePage() {
 
       {/* Profile header */}
       <div className="flex items-start gap-4 mb-8">
-        <div className="size-14 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
-          <span className="text-xl font-bold text-white/60">
+        <div className="size-14 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+          <span className="text-xl font-bold text-gray-500">
             {user.full_name.charAt(0).toUpperCase()}
           </span>
         </div>
@@ -135,35 +135,35 @@ export function SellerProfilePage() {
             /* ── Profile view ── */
             <>
               <div className="flex items-center gap-3 flex-wrap mb-2">
-                <h1 className="text-xl font-semibold text-white">{user.full_name}</h1>
-                <Badge variant={user.role === 'admin' ? 'gold' : 'info'}>
+                <h1 className="text-xl font-semibold text-gray-900">{user.full_name}</h1>
+                <Badge variant={user.role === 'admin' ? 'default' : 'info'}>
                   {user.role === 'admin' ? 'Admin' : 'Vendedor'}
                 </Badge>
                 <button
                   onClick={startEditing}
-                  className="flex items-center gap-1.5 text-xs text-white/40 hover:text-white transition-colors"
+                  className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-900 transition-colors"
                 >
                   <Pencil size={12} />
                   Editar
                 </button>
               </div>
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-                <span className="flex items-center gap-1.5 text-white/40 text-sm">
+                <span className="flex items-center gap-1.5 text-gray-500 text-sm">
                   <Mail size={13} />
                   {user.email}
                 </span>
                 {user.phone ? (
-                  <span className="flex items-center gap-1.5 text-white/40 text-sm">
+                  <span className="flex items-center gap-1.5 text-gray-500 text-sm">
                     <Phone size={13} />
                     +{user.phone}
                   </span>
                 ) : (
-                  <span className="flex items-center gap-1.5 text-error/60 text-sm">
+                  <span className="flex items-center gap-1.5 text-red-400 text-sm">
                     <Phone size={13} />
                     Sin teléfono
                   </span>
                 )}
-                <span className="flex items-center gap-1.5 text-white/40 text-sm">
+                <span className="flex items-center gap-1.5 text-gray-500 text-sm">
                   <Calendar size={13} />
                   Desde {formatDate(user.created_at)}
                 </span>
@@ -175,10 +175,10 @@ export function SellerProfilePage() {
 
       {/* Orders section */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-sm font-semibold text-white/50 uppercase tracking-widest">
+        <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-widest">
           Historial de pedidos
         </h2>
-        <span className="text-xs text-white/30">{orders.length} pedidos</span>
+        <span className="text-xs text-gray-400">{orders.length} pedidos</span>
       </div>
 
       {orders.length === 0 ? (
@@ -192,19 +192,19 @@ export function SellerProfilePage() {
             <button
               key={order.id}
               onClick={() => setSelectedOrderId(order.id)}
-              className="w-full flex items-center justify-between gap-4 p-4 bg-surface border border-white/10 rounded-xl hover:border-white/25 transition-colors text-left"
+              className="w-full flex items-center justify-between gap-4 p-4 bg-white border border-gray-200 rounded-xl hover:border-gray-300 transition-colors text-left"
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2.5 mb-1">
-                  <span className="font-semibold text-white text-sm">
+                  <span className="font-semibold text-gray-900 text-sm">
                     {order.order_number}
                   </span>
                   <OrderStatusBadge status={order.status} />
                 </div>
-                <p className="text-sm text-white/50 truncate">{order.store_name}</p>
-                <p className="text-xs text-white/30 mt-0.5">{formatDate(order.created_at)}</p>
+                <p className="text-sm text-gray-500 truncate">{order.store_name}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{formatDate(order.created_at)}</p>
               </div>
-              <span className="text-gold font-bold flex-shrink-0 text-sm">
+              <span className="text-gray-900 font-bold flex-shrink-0 text-sm">
                 {formatCurrency(order.total_amount)}
               </span>
             </button>

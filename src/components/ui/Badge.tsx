@@ -4,7 +4,7 @@ import { cn } from '@/utils/cn'
 import type { OrderStatus, ContainerStatus } from '@/types/database.types'
 import type { OrderFulfillmentType } from '@/utils/orderFulfillmentType'
 
-type BadgeVariant = 'default' | 'success' | 'warning' | 'error' | 'info' | 'gold'
+type BadgeVariant = 'default' | 'success' | 'warning' | 'error' | 'info'
 
 interface BadgeProps {
   children: ReactNode
@@ -13,12 +13,11 @@ interface BadgeProps {
 }
 
 const variantClasses: Record<BadgeVariant, string> = {
-  default: 'bg-white/10 text-white/70',
-  success: 'bg-success/15 text-success',
-  warning: 'bg-warning/15 text-warning',
-  error: 'bg-error/15 text-error',
-  info: 'bg-info/15 text-info',
-  gold: 'bg-gold/15 text-gold',
+  default: 'bg-gray-100 text-gray-600',
+  success: 'bg-green-50 text-green-700',
+  warning: 'bg-amber-50 text-amber-700',
+  error:   'bg-red-50 text-red-700',
+  info:    'bg-blue-50 text-blue-700',
 }
 
 export function Badge({ children, variant = 'default', className }: BadgeProps) {
@@ -36,31 +35,31 @@ export function Badge({ children, variant = 'default', className }: BadgeProps) 
 }
 
 const statusVariantMap: Record<OrderStatus, BadgeVariant> = {
-  draft: 'default',
-  pending: 'warning',
-  confirmed: 'info',
-  processing: 'gold',
+  draft:              'default',
+  pending:            'warning',
+  confirmed:          'info',
+  processing:         'info',
   awaiting_container: 'info',
-  in_transit: 'gold',
-  in_customs: 'warning',
-  in_warehouse: 'gold',
-  shipped: 'gold',
-  delivered: 'success',
-  cancelled: 'error',
+  in_transit:         'info',
+  in_customs:         'warning',
+  in_warehouse:       'info',
+  shipped:            'info',
+  delivered:          'success',
+  cancelled:          'error',
 }
 
 const statusLabelMap: Record<OrderStatus, string> = {
-  draft: 'Borrador',
-  pending: 'Pendiente',
-  confirmed: 'Confirmado',
-  processing: 'En proceso',
+  draft:              'Borrador',
+  pending:            'Pendiente',
+  confirmed:          'Confirmado',
+  processing:         'En proceso',
   awaiting_container: 'Esperando container',
-  in_transit: 'En tránsito',
-  in_customs: 'En aduana',
-  in_warehouse: 'En depósito',
-  shipped: 'Enviado',
-  delivered: 'Entregado',
-  cancelled: 'Cancelado',
+  in_transit:         'En tránsito',
+  in_customs:         'En aduana',
+  in_warehouse:       'En depósito',
+  shipped:            'Enviado',
+  delivered:          'Entregado',
+  cancelled:          'Cancelado',
 }
 
 interface StatusBadgeProps {
@@ -77,21 +76,21 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
 }
 
 const containerStatusVariantMap: Record<ContainerStatus, BadgeVariant> = {
-  draft: 'default',
-  ordered: 'info',
-  in_transit: 'gold',
+  draft:      'default',
+  ordered:    'info',
+  in_transit: 'info',
   in_customs: 'warning',
-  arrived: 'success',
-  cancelled: 'error',
+  arrived:    'success',
+  cancelled:  'error',
 }
 
 const containerStatusLabelMap: Record<ContainerStatus, string> = {
-  draft: 'Borrador',
-  ordered: 'Pedido',
+  draft:      'Borrador',
+  ordered:    'Pedido',
   in_transit: 'En tránsito',
   in_customs: 'En aduana',
-  arrived: 'Llegado',
-  cancelled: 'Cancelado',
+  arrived:    'Llegado',
+  cancelled:  'Cancelado',
 }
 
 interface ContainerStatusBadgeProps {

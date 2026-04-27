@@ -14,12 +14,12 @@ export function LowStockAlerts({ products }: LowStockAlertsProps) {
     <Card>
       <CardHeader
         title="Stock bajo"
-        description="Productos con ≤5 unidades"
+        description="Productos con ≤20 unidades"
         action={
           products.length > 0 ? (
             <button
               onClick={() => navigate('/admin/products')}
-              className="text-xs text-gold hover:text-gold/80 transition-colors"
+              className="text-xs text-gray-500 hover:text-gray-700 transition-colors"
             >
               Gestionar →
             </button>
@@ -32,14 +32,14 @@ export function LowStockAlerts({ products }: LowStockAlertsProps) {
           <div className="size-8 rounded-full bg-success/15 flex items-center justify-center">
             <AlertTriangle size={16} className="text-success" />
           </div>
-          <p className="text-sm text-white/40">Todo el stock en orden</p>
+          <p className="text-sm text-gray-400">Todo el stock en orden</p>
         </div>
       ) : (
         <div className="flex flex-col gap-2">
           {products.map((product) => (
             <div
               key={product.id}
-              className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]"
+              className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-gray-200"
             >
               <div
                 className={`size-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
@@ -56,8 +56,8 @@ export function LowStockAlerts({ products }: LowStockAlertsProps) {
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-white truncate">{product.name}</p>
-                <p className="text-xs text-white/30 font-mono">{product.sku}</p>
+                <p className="text-sm font-medium text-gray-900 truncate">{product.name}</p>
+                <p className="text-xs text-gray-400 font-mono">{product.sku}</p>
               </div>
               <span
                 className={`text-sm font-bold tabular-nums flex-shrink-0 ${

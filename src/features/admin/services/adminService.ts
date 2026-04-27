@@ -82,7 +82,7 @@ export const adminService = {
         supabase
           .from('products')
           .select('id, name, sku, stock_quantity')
-          .lte('stock_quantity', 5)
+          .lte('stock_quantity', 20)
           .eq('is_active', true)
           .order('stock_quantity', { ascending: true })
           .limit(5),

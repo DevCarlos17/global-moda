@@ -18,14 +18,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="text-sm font-medium text-white/80"
+            className="text-sm font-medium text-gray-700"
           >
             {label}
           </label>
         )}
         <div className="relative">
           {leftIcon && (
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
               {leftIcon}
             </span>
           )}
@@ -33,11 +33,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={inputId}
             className={cn(
-              'w-full h-10 bg-white/5 border rounded-lg px-3 text-sm text-white placeholder:text-white/30',
+              'w-full h-10 bg-white border rounded-lg px-3 text-sm text-gray-900 placeholder:text-gray-400',
               'focus:outline-none focus:ring-1 transition-colors duration-150',
               error
-                ? 'border-error focus:border-error focus:ring-error/50'
-                : 'border-white/10 focus:border-white/40 focus:ring-white/15',
+                ? 'border-red-400 focus:border-red-500 focus:ring-red-200'
+                : 'border-gray-200 focus:border-gray-400 focus:ring-gray-200',
               leftIcon && 'pl-9',
               rightIcon && 'pr-9',
               className,
@@ -45,13 +45,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {rightIcon && (
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40">
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
               {rightIcon}
             </span>
           )}
         </div>
-        {error && <p className="text-xs text-error">{error}</p>}
-        {hint && !error && <p className="text-xs text-white/40">{hint}</p>}
+        {error && <p className="text-xs text-red-600">{error}</p>}
+        {hint && !error && <p className="text-xs text-gray-400">{hint}</p>}
       </div>
     )
   },

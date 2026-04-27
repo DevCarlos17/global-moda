@@ -116,11 +116,11 @@ export function ProductsPage() {
       render: (product) => (
         <div className="flex items-center gap-3">
           {product.images[0] ? (
-            <img src={product.images[0]} alt={product.name} className="size-9 rounded-lg object-cover bg-white/5 flex-shrink-0" />
+            <img src={product.images[0]} alt={product.name} className="size-9 rounded-lg object-cover bg-gray-100 flex-shrink-0" />
           ) : (
-            <div className="size-9 rounded-lg bg-white/5 flex-shrink-0" />
+            <div className="size-9 rounded-lg bg-gray-100 flex-shrink-0" />
           )}
-          <span className="font-medium text-white">{product.name}</span>
+          <span className="font-medium text-gray-900">{product.name}</span>
         </div>
       ),
     },
@@ -129,14 +129,14 @@ export function ProductsPage() {
       header: 'SKU',
       sortField: 'sku',
       render: (product) => (
-        <span className="text-white/50 font-mono text-xs">{product.sku}</span>
+        <span className="text-gray-400 font-mono text-xs">{product.sku}</span>
       ),
     },
     {
       key: 'category',
       header: 'Categoría',
       render: (product) => (
-        <span className="text-white/50">{product.category?.name ?? '—'}</span>
+        <span className="text-gray-500">{product.category?.name ?? '—'}</span>
       ),
     },
     {
@@ -144,7 +144,7 @@ export function ProductsPage() {
       header: 'Precio',
       sortField: 'price',
       render: (product) => (
-        <span className="text-gold font-semibold">{formatCurrency(product.price)}</span>
+        <span className="text-gray-900 font-semibold">{formatCurrency(product.price)}</span>
       ),
     },
     {
@@ -172,7 +172,7 @@ export function ProductsPage() {
         <div className="flex items-center justify-end gap-1">
           <button
             onClick={(e) => handleAdjustStock(e, product)}
-            className="p-1.5 rounded-lg text-white/40 hover:text-warning hover:bg-warning/10 transition-colors"
+            className="p-1.5 rounded-lg text-gray-400 hover:text-amber-500 hover:bg-amber-50 transition-colors"
             aria-label="Ajustar stock"
             title="Ajustar stock"
           >
@@ -180,14 +180,14 @@ export function ProductsPage() {
           </button>
           <button
             onClick={(e) => handleEdit(e, product.id)}
-            className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-colors"
+            className="p-1.5 rounded-lg text-gray-400 hover:text-gray-900 hover:bg-gray-100 transition-colors"
             aria-label="Editar"
           >
             <Pencil size={14} />
           </button>
           <button
             onClick={(e) => handleDelete(e, product)}
-            className="p-1.5 rounded-lg text-white/40 hover:text-error hover:bg-error/10 transition-colors"
+            className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
             aria-label="Eliminar"
           >
             <Trash2 size={14} />
@@ -228,7 +228,7 @@ export function ProductsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold text-white">Productos</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">Productos</h1>
         <Button onClick={() => navigate('/admin/products/new')} size="sm">
           <Plus size={16} />
           Nuevo producto
