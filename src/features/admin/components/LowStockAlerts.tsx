@@ -18,7 +18,7 @@ export function LowStockAlerts({ products }: LowStockAlertsProps) {
         action={
           products.length > 0 ? (
             <button
-              onClick={() => navigate('/admin/products')}
+              onClick={() => navigate('/admin/inventory')}
               className="text-xs text-gray-500 hover:text-gray-700 transition-colors"
             >
               Gestionar →

@@ -50,7 +50,7 @@ export function Sidebar() {
           label: 'Pedidos',
           badge: pendingCount > 0 ? pendingCount : undefined,
         },
-        { to: '/admin/products', icon: <Package size={18} />, label: 'Productos' },
+        { to: '/admin/inventory', icon: <Package size={18} />, label: 'Inventario' },
         { to: '/admin/categories', icon: <Tag size={18} />, label: 'Categorías' },
         { to: '/admin/containers', icon: <Ship size={18} />, label: 'Containers' },
         { to: '/catalog', icon: <Store size={18} />, label: 'Catálogo' },
@@ -82,7 +82,7 @@ export function Sidebar() {
         className={cn(
           'fixed left-0 top-0 h-full z-40 bg-white border-r border-gray-200',
           'flex flex-col overflow-hidden',
-          'transition-[width] duration-200 ease-in-out',
+          'transition-[width] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]',
           // Desktop: collapsed by default, expands on hover
           isExpanded ? 'md:w-56' : 'md:w-16',
           // Mobile: always full width, shown/hidden via translate
@@ -93,13 +93,13 @@ export function Sidebar() {
         {/* Header — aligned with navbar height */}
         <div className="h-16 flex items-center px-4 flex-shrink-0 border-b border-gray-200 overflow-hidden">
           <span className={cn(
-            'font-bold tracking-widest text-sm uppercase text-gray-900 whitespace-nowrap transition-opacity duration-150',
+            'font-bold tracking-widest text-sm uppercase text-gray-900 whitespace-nowrap transition-opacity duration-200',
             isExpanded ? 'opacity-100' : 'opacity-0 md:hidden',
           )}>
             Global Moda
           </span>
           <span className={cn(
-            'font-bold tracking-widest text-sm uppercase text-gray-900 whitespace-nowrap transition-opacity duration-150 hidden',
+            'font-bold tracking-widest text-sm uppercase text-gray-900 whitespace-nowrap transition-opacity duration-200 hidden',
             !isExpanded && 'md:block md:mx-auto',
           )}>
             GM
@@ -145,7 +145,7 @@ export function Sidebar() {
                   >
                     <span className="flex-shrink-0">{item.icon}</span>
                     <span className={cn(
-                      'truncate flex-1 font-medium whitespace-nowrap transition-opacity duration-150',
+                      'truncate flex-1 font-medium whitespace-nowrap transition-opacity duration-200',
                       isExpanded ? 'opacity-100' : 'opacity-0 w-0',
                     )}>
                       {item.label}
@@ -153,7 +153,7 @@ export function Sidebar() {
                     {item.badge != null && item.badge > 0 && (
                       <span
                         className={cn(
-                          'flex-shrink-0 min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold flex items-center justify-center bg-gray-900 text-white whitespace-nowrap transition-opacity duration-150',
+                          'flex-shrink-0 min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold flex items-center justify-center bg-gray-900 text-white whitespace-nowrap transition-opacity duration-200',
                           !isExpanded && 'absolute -top-1 -right-1',
                           isExpanded ? 'opacity-100' : 'opacity-0 md:opacity-100',
                         )}

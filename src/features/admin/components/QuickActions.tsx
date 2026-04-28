@@ -25,7 +25,7 @@ export function QuickActions({ onNewSeller }: QuickActionsProps) {
         <Button
           variant="secondary"
           className="justify-start gap-3"
-          onClick={() => navigate('/admin/products/new')}
+          onClick={() => navigate('/admin/inventory/new')}
         >
           <Plus size={16} />
           Nuevo producto

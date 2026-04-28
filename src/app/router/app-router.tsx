@@ -59,10 +59,10 @@ export function AppRouter() {
             <Route element={<AdminLayout />}>
               <Route path="/admin" element={<DashboardPage />} />
               <Route path="/admin/orders" element={<AdminOrdersPage />} />
-              <Route path="/admin/products" element={<ProductsPage />} />
-              <Route path="/admin/products/new" element={<ProductFormPage />} />
+              <Route path="/admin/inventory" element={<ProductsPage />} />
+              <Route path="/admin/inventory/new" element={<ProductFormPage />} />
               <Route
-                path="/admin/products/:id/edit"
+                path="/admin/inventory/:id/edit"
                 element={<ProductFormPage />}
               />
               <Route path="/admin/categories" element={<CategoriesPage />} />

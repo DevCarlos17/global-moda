@@ -18,7 +18,7 @@ export function useCreateProduct(afterCreate?: (product: Product) => Promise<voi
       if (afterCreateRef.current) await afterCreateRef.current(product)
       queryClient.invalidateQueries({ queryKey: ['products'] })
       toast.success('Producto creado exitosamente')
-      navigate('/admin/products')
+      navigate('/admin/inventory')
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Error al crear el producto')

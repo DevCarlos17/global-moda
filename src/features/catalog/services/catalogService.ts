@@ -14,7 +14,7 @@ export const catalogService = {
 
     let query = supabase
       .from('products')
-      .select('*, category:categories(*), variants:product_variants(id,label,stock_quantity,price_override,is_active,display_order)')
+      .select('*, category:categories(*), variants:product_variants(id,label,attributes,stock_quantity,price_override,is_active,display_order)')
       .order(column, { ascending })
 
     if (filters.isActive !== undefined) {

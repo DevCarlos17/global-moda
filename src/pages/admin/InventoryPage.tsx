@@ -17,7 +17,7 @@ import type { Column } from '@/components/ui/DataTable'
 const STOCK_OPTIONS: SelectOption[] = [
   { value: 'all', label: 'Todos los stocks' },
   { value: 'in_stock', label: 'Con stock' },
-  { value: 'low_stock', label: 'Stock bajo (≤5)' },
+  { value: 'low_stock', label: 'Stock bajo (≤20)' },
   { value: 'out_of_stock', label: 'Sin stock' },
 ]
 
@@ -27,6 +27,14 @@ const ACTIVE_OPTIONS: SelectOption[] = [
   { value: 'inactive', label: 'Inactivos' },
 ]
 
+// ─── Effective stock ─────────────────────────────────────────────────────────
+// When a product has variants, the real stock is the sum of all variant stocks.
+
+const getEffectiveStock = (p: InventoryProduct): number =>
+  p.variants.length > 0
+    ? p.variants.reduce((sum, v) => sum + v.stock_quantity, 0)
+    : p.stock_quantity
+
 // ─── Filter function ──────────────────────────────────────────────────────────
 
 const inventoryFilterFn = (
@@ -34,13 +42,10 @@ const inventoryFilterFn = (
   filters: Record<string, string>,
 ): boolean => {
   if (filters.stock && filters.stock !== 'all') {
-    if (filters.stock === 'in_stock' && product.stock_quantity <= 0) return false
-    if (
-      filters.stock === 'low_stock' &&
-      (product.stock_quantity === 0 || product.stock_quantity > 5)
-    )
-      return false
-    if (filters.stock === 'out_of_stock' && product.stock_quantity > 0) return false
+    const stock = getEffectiveStock(product)
+    if (filters.stock === 'in_stock' && stock <= 0) return false
+    if (filters.stock === 'low_stock' && (stock === 0 || stock > 20)) return false
+    if (filters.stock === 'out_of_stock' && stock > 0) return false
   }
   if (filters.active && filters.active !== 'all') {
     if (filters.active === 'active' && !product.is_active) return false
@@ -119,7 +124,7 @@ const COLUMNS: Column<InventoryProduct>[] = [
     key: 'stock_quantity',
     header: 'Stock',
     sortField: 'stock_quantity',
-    render: (p) => <StockBadge qty={p.stock_quantity} />,
+    render: (p) => <StockBadge qty={getEffectiveStock(p)} />,
   },
   {
     key: 'price',
@@ -167,8 +172,7 @@ export function InventoryPage() {
 
   if (error) return <ErrorState onRetry={refetch} />
 
-  // Low stock banner: active products with stock_quantity between 1 and 5 (inclusive) OR 0
-  const lowStockCount = products.filter((p) => p.is_active && p.stock_quantity <= 5).length
+  const lowStockCount = products.filter((p) => p.is_active && getEffectiveStock(p) <= 20).length
 
   const filterSlot = (
     <>
@@ -229,6 +233,7 @@ export function InventoryPage() {
       <StockAdjustModal
         isOpen={selectedProduct !== null}
         onClose={() => setSelectedProduct(null)}
+        onSaved={refetch}
         product={selectedProduct}
       />
     </div>

@@ -55,7 +55,7 @@ export function ColorSelector({ selected, onChange }: ColorSelectorProps) {
               className={cn(
                 'size-8 rounded-full border-2 flex items-center justify-center transition-all',
                 isSelected
-                  ? 'border-gold scale-110 shadow-[0_0_0_2px_rgba(184,155,84,0.3)]'
+                  ? 'border-gray-900 scale-110 shadow-[0_0_0_2px_rgba(0,0,0,0.15)]'
                   : 'border-transparent hover:scale-105',
               )}
               style={{ backgroundColor: color.hex }}
@@ -71,7 +71,7 @@ export function ColorSelector({ selected, onChange }: ColorSelectorProps) {
             <span
               className={cn(
                 'text-[10px] leading-tight transition-colors',
-                isSelected ? 'text-gold' : 'text-white/40 group-hover:text-white/70',
+                isSelected ? 'text-gray-900 font-medium' : 'text-gray-500 group-hover:text-gray-800',
               )}
             >
               {color.name}
