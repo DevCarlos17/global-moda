@@ -55,13 +55,13 @@ function ProductPreviewCard({ name, sku, price, categoryName, image, variants }:
 
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-[10px] text-white/25 uppercase tracking-widest text-center">
+      <p className="text-[10px] text-gray-400 uppercase tracking-widest text-center">
         Vista previa
       </p>
 
-      <div className="flex flex-col bg-surface border border-white/10 rounded-2xl overflow-hidden">
+      <div className="flex flex-col bg-white border border-gray-200 rounded-2xl overflow-hidden">
         {/* Image — taller for the bigger column */}
-        <div className="aspect-[4/3] bg-white/5 overflow-hidden relative">
+        <div className="aspect-[4/3] bg-gray-100 overflow-hidden relative">
           {image ? (
             <img
               src={image}
@@ -69,9 +69,9 @@ function ProductPreviewCard({ name, sku, price, categoryName, image, variants }:
               className="size-full object-cover"
             />
           ) : (
-            <div className="size-full flex flex-col items-center justify-center gap-3 text-white/10">
+            <div className="size-full flex flex-col items-center justify-center gap-3 text-gray-300">
               <ShoppingBag size={40} />
-              <span className="text-xs text-white/20">Sin imagen</span>
+              <span className="text-xs text-gray-400">Sin imagen</span>
             </div>
           )}
           {variants.length > 0 && !hasStock && (
@@ -86,11 +86,11 @@ function ProductPreviewCard({ name, sku, price, categoryName, image, variants }:
         <div className="p-4 flex flex-col gap-2">
           {/* SKU + Category */}
           <div className="flex items-center justify-between gap-2">
-            <span className="text-[11px] text-white/25 uppercase tracking-wider font-mono truncate">
+            <span className="text-[11px] text-gray-400 uppercase tracking-wider font-mono truncate">
               {sku || 'SKU-000'}
             </span>
             {categoryName && (
-              <span className="text-[11px] text-white/40 truncate shrink-0 max-w-[55%]">
+              <span className="text-[11px] text-gray-500 truncate shrink-0 max-w-[55%]">
                 {categoryName}
               </span>
             )}
@@ -99,9 +99,9 @@ function ProductPreviewCard({ name, sku, price, categoryName, image, variants }:
           {/* Name */}
           <h3 className="text-sm font-semibold leading-snug line-clamp-2 min-h-[2.5em]">
             {name ? (
-              <span className="text-white">{name}</span>
+              <span className="text-gray-900">{name}</span>
             ) : (
-              <span className="text-white/20">Nombre del producto</span>
+              <span className="text-gray-300">Nombre del producto</span>
             )}
           </h3>
 
@@ -111,7 +111,7 @@ function ProductPreviewCard({ name, sku, price, categoryName, image, variants }:
               hasStock ? (
                 <>
                   <span className="size-1.5 rounded-full flex-shrink-0 bg-success" />
-                  <span className="text-xs text-white/40">
+                  <span className="text-xs text-gray-500">
                     {activeVariants.length} {activeVariants.length === 1 ? 'opción disponible' : 'opciones disponibles'}
                   </span>
                 </>
@@ -122,20 +122,20 @@ function ProductPreviewCard({ name, sku, price, categoryName, image, variants }:
                 </>
               )
             ) : (
-              <span className="text-xs text-white/15">Sin variantes aún</span>
+              <span className="text-xs text-gray-300">Sin variantes aún</span>
             )}
           </div>
 
           {/* Price */}
-          <div className="flex items-center justify-between pt-1 border-t border-white/[0.06]">
+          <div className="flex items-center justify-between pt-1 border-t border-gray-100">
             <span className="font-bold text-base">
               {parsedPrice > 0 ? (
-                <span className="text-gold">{formatCurrency(parsedPrice)}</span>
+                <span className="text-gray-900">{formatCurrency(parsedPrice)}</span>
               ) : (
-                <span className="text-white/20">$ —</span>
+                <span className="text-gray-300">$ —</span>
               )}
             </span>
-            <div className="size-8 flex items-center justify-center rounded-lg bg-white/8 text-white/20">
+            <div className="size-8 flex items-center justify-center rounded-lg bg-gray-100 text-gray-300">
               <ShoppingBag size={14} />
             </div>
           </div>
@@ -147,13 +147,13 @@ function ProductPreviewCard({ name, sku, price, categoryName, image, variants }:
             {variants.slice(0, 10).map((v) => (
               <span
                 key={v.id}
-                className="px-2.5 py-0.5 rounded-full text-[11px] border border-white/10 text-white/40"
+                className="px-2.5 py-0.5 rounded-full text-[11px] border border-gray-200 text-gray-500"
               >
                 {v.label}
               </span>
             ))}
             {variants.length > 10 && (
-              <span className="text-[11px] text-white/20 self-center pl-1">
+              <span className="text-[11px] text-gray-400 self-center pl-1">
                 +{variants.length - 10} más
               </span>
             )}
@@ -281,18 +281,28 @@ export function ProductForm({ product }: ProductFormProps) {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    const stockQuantity = localVariants.reduce((sum, v) => sum + v.stock_quantity, 0)
-    const payload = {
-      ...formData,
-      price: Number(formData.price),
-      stock_quantity: stockQuantity,
-      category_id: formData.category_id || null,
-      images,
-    }
+
     if (isEditing && product) {
-      update({ id: product.id, payload })
+      // Never touch stock_quantity when editing: it's derived from variant stocks
+      // and managed exclusively via VariantManager inline edit or StockAdjustModal
+      update({
+        id: product.id,
+        payload: {
+          ...formData,
+          price: Number(formData.price),
+          category_id: formData.category_id || null,
+          images,
+        },
+      })
     } else {
-      create(payload)
+      const stockQuantity = localVariants.reduce((sum, v) => sum + v.stock_quantity, 0)
+      create({
+        ...formData,
+        price: Number(formData.price),
+        stock_quantity: stockQuantity,
+        category_id: formData.category_id || null,
+        images,
+      })
     }
   }
 
@@ -308,14 +318,14 @@ export function ProductForm({ product }: ProductFormProps) {
           {/* 1. Imágenes */}
           <Card>
             <div className="flex items-center justify-between mb-4">
-              <p className="text-sm font-semibold text-white">Imágenes</p>
+              <p className="text-sm font-semibold text-gray-900">Imágenes</p>
               {images.length > 0 && (
-                <p className="text-xs text-white/30">
+                <p className="text-xs text-gray-400">
                   Toca <Star size={10} className="inline mb-0.5" /> para poner de portada
                 </p>
               )}
             </div>
-            <div className="flex gap-3 overflow-x-auto pb-1">
+            <div className="flex gap-3 overflow-x-auto pt-3 pb-1">
               {images.map((url, i) => (
                 <div
                   key={url}
@@ -328,7 +338,7 @@ export function ProductForm({ product }: ProductFormProps) {
                     dragIndex === i
                       ? 'opacity-40 scale-95'
                       : dragOverIndex === i && dragIndex !== null
-                        ? 'ring-2 ring-gold ring-offset-2 ring-offset-surface'
+                        ? 'ring-2 ring-gray-900 ring-offset-2 ring-offset-white'
                         : ''
                   }`}
                 >
@@ -336,7 +346,7 @@ export function ProductForm({ product }: ProductFormProps) {
 
                   {/* Drag handle hint */}
                   <div className="absolute top-1.5 left-1/2 -translate-x-1/2 pointer-events-none">
-                    <GripHorizontal size={14} className="text-white/40 drop-shadow-sm" />
+                    <GripHorizontal size={14} className="text-white/60 drop-shadow-sm" />
                   </div>
 
                   {/* Remove button */}
@@ -350,8 +360,8 @@ export function ProductForm({ product }: ProductFormProps) {
 
                   {/* Primary indicator */}
                   {i === 0 ? (
-                    <span className="absolute bottom-1 left-1 flex items-center gap-0.5 bg-black/60 rounded-md px-1.5 py-0.5 text-[10px] text-gold font-medium">
-                      <Star size={9} className="fill-gold" />
+                    <span className="absolute bottom-1 left-1 flex items-center gap-0.5 bg-black/60 rounded-md px-1.5 py-0.5 text-[10px] text-amber-300 font-medium">
+                      <Star size={9} className="fill-amber-300" />
                       Portada
                     </span>
                   ) : (
@@ -359,7 +369,7 @@ export function ProductForm({ product }: ProductFormProps) {
                       type="button"
                       onClick={() => setAsPrimary(i)}
                       title="Poner de portada"
-                      className="absolute bottom-1 left-1 size-6 flex items-center justify-center bg-black/60 rounded-md text-white/50 hover:text-gold hover:bg-black/80 transition-colors"
+                      className="absolute bottom-1 left-1 size-6 flex items-center justify-center bg-black/60 rounded-md text-white/50 hover:text-amber-300 hover:bg-black/80 transition-colors"
                     >
                       <Star size={12} />
                     </button>
@@ -367,16 +377,16 @@ export function ProductForm({ product }: ProductFormProps) {
                 </div>
               ))}
               <label
-                className={`size-28 flex-shrink-0 flex flex-col items-center justify-center gap-1.5 border-2 border-dashed border-white/20 rounded-xl cursor-pointer hover:border-gold/50 transition-colors ${
+                className={`size-28 flex-shrink-0 flex flex-col items-center justify-center gap-1.5 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-gray-400 transition-colors ${
                   isUploading ? 'opacity-50 pointer-events-none' : ''
                 }`}
               >
                 {isUploading ? (
-                  <span className="size-5 border-2 border-white/20 border-t-gold rounded-full animate-spin" />
+                  <span className="size-5 border-2 border-gray-200 border-t-gray-700 rounded-full animate-spin" />
                 ) : (
                   <>
-                    <Upload size={20} className="text-white/30" />
-                    <span className="text-xs text-white/30">Subir foto</span>
+                    <Upload size={20} className="text-gray-400" />
+                    <span className="text-xs text-gray-400">Subir foto</span>
                   </>
                 )}
                 <input type="file" accept="image/*" multiple onChange={handleImageUpload} className="hidden" />
@@ -386,7 +396,7 @@ export function ProductForm({ product }: ProductFormProps) {
 
           {/* 2. Información del producto */}
           <Card>
-            <p className="text-sm font-semibold text-white mb-4">Información del producto</p>
+            <p className="text-sm font-semibold text-gray-900 mb-4">Información del producto</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 label="SKU *"
@@ -418,13 +428,13 @@ export function ProductForm({ product }: ProductFormProps) {
               />
               <div className="sm:col-span-2">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium text-white/80">Descripción</label>
+                  <label className="text-sm font-medium text-gray-700">Descripción</label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData((d) => ({ ...d, description: e.target.value }))}
                     placeholder="Descripción del producto..."
                     rows={4}
-                    className="w-full px-3 py-2.5 rounded-lg border border-white/10 bg-white/5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-colors resize-none"
+                    className="w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-white text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-200 transition-colors resize-none"
                   />
                 </div>
               </div>
@@ -434,9 +444,9 @@ export function ProductForm({ product }: ProductFormProps) {
                     type="checkbox"
                     checked={formData.is_active}
                     onChange={(e) => setFormData((d) => ({ ...d, is_active: e.target.checked }))}
-                    className="size-4 accent-gold"
+                    className="size-4 accent-gray-900"
                   />
-                  <span className="text-sm text-white/70">Producto activo</span>
+                  <span className="text-sm text-gray-600">Producto activo</span>
                 </label>
               </div>
             </div>

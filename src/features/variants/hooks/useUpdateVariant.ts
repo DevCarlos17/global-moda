@@ -12,6 +12,7 @@ export function useUpdateVariant(productId: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['variants', productId] })
       queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({ queryKey: ['inventory'] })
       toast.success('Variante actualizada')
     },
     onError: (e: Error) => toast.error(e.message),

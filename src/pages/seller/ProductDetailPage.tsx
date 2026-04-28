@@ -51,9 +51,38 @@ interface VariantSelectorProps {
 function VariantSelector({ variants, selectedVariant, onSelect }: VariantSelectorProps) {
   const type = detectVariantType(variants)
 
-  // size_color — two-step state
-  const [selectedColor, setSelectedColor] = useState<string | null>(null)
-  const [selectedSize, setSelectedSize] = useState<string | null>(null)
+  // Hoist so it's available for state initializers and JSX
+  const uniqueColors = [...new Set(
+    variants.map((v) => v.attributes?.color as string).filter(Boolean),
+  )]
+
+  // Compute defaults for pre-selection on mount
+  const defaultColor = type === 'size_color' ? (uniqueColors[0] ?? null) : null
+  const defaultSizeVariant = defaultColor
+    ? variants.find((v) => v.attributes?.color === defaultColor)
+    : null
+  const defaultSize = type === 'size_color'
+    ? ((defaultSizeVariant?.attributes?.size as string) ?? null)
+    : null
+
+  // size_color — two-step state (pre-selected with first available options)
+  const [selectedColor, setSelectedColor] = useState<string | null>(defaultColor)
+  const [selectedSize, setSelectedSize] = useState<string | null>(defaultSize)
+
+  // Call onSelect once on mount so the parent gets the default variant immediately
+  useEffect(() => {
+    if (type === 'size_color') {
+      if (defaultColor && defaultSize) {
+        const match = variants.find(
+          (v) => v.attributes?.color === defaultColor && v.attributes?.size === defaultSize,
+        )
+        onSelect(match ?? null)
+      }
+    } else if (variants.length > 0) {
+      onSelect(variants[0])
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // When color changes, reset size and variant
   const handleColorSelect = (color: string) => {
@@ -79,9 +108,6 @@ function VariantSelector({ variants, selectedVariant, onSelect }: VariantSelecto
 
   // ── size_color ──
   if (type === 'size_color') {
-    const uniqueColors = [...new Set(
-      variants.map((v) => v.attributes?.color as string).filter(Boolean),
-    )]
     const sizesForColor = selectedColor
       ? variants.filter((v) => v.attributes?.color === selectedColor)
       : []
@@ -350,12 +376,21 @@ export function ProductDetailPage() {
   const [localStockQty, setLocalStockQty] = useState('1')
   const [preorderQty, setPreorderQty] = useState(1)
   const [localPreorderQty, setLocalPreorderQty] = useState('1')
+  const [source, setSource] = useState<'stock' | 'preorder'>('stock')
 
   const { data: product, isLoading, error, refetch } = useProductDetail(id!)
   const { mutate: addToCart, isPending } = useAddToCart()
 
   useEffect(() => { setLocalStockQty(String(stockQty)) }, [stockQty])
   useEffect(() => { setLocalPreorderQty(String(preorderQty)) }, [preorderQty])
+  useEffect(() => {
+    if (!product) return
+    const activeVars = product.variants?.filter((v) => v.is_active) ?? []
+    const stock = selectedVariant
+      ? selectedVariant.stock_quantity
+      : activeVars.length > 0 ? 0 : product.stock_quantity
+    setSource(stock > 0 ? 'stock' : 'preorder')
+  }, [selectedVariant, product])
 
   if (isLoading) return <PageLoader />
   if (error || !product) return <ErrorState onRetry={refetch} />
@@ -431,13 +466,6 @@ export function ProductDetailPage() {
             />
           )}
 
-          {/* Prompt si falta seleccionar variante */}
-          {hasVariants && !selectedVariant && (
-            <p className="text-sm text-amber-500">
-              Seleccioná una opción para ver las formas de compra
-            </p>
-          )}
-
           {/* Stock indicator */}
           {variantReady && (
             <div className="flex items-center gap-2 text-sm">
@@ -450,66 +478,94 @@ export function ProductDetailPage() {
                 </>
               ) : (
                 <>
-                  <Ship size={14} className="text-blue-400 flex-shrink-0" />
-                  <span className="text-blue-400">Sin stock · solo disponible por pre-pedido</span>
+                  <Ship size={14} className="text-gray-400 flex-shrink-0" />
+                  <span className="text-gray-400">Sin stock · solo disponible por pre-pedido</span>
                 </>
               )}
             </div>
           )}
 
-          {/* Stock section */}
-          {variantReady && effectiveStock > 0 && (
-            <div className="rounded-xl border border-green-200 bg-green-50 p-4 flex flex-col gap-3">
-              <div className="flex items-center gap-2 flex-wrap">
-                <Warehouse size={14} className="text-green-600" />
-                <span className="text-sm font-medium text-gray-900">Comprar desde stock</span>
-                <span className="text-xs text-gray-400">máx. {effectiveStock} u.</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <QtyControl
-                  value={clampedStockQty} localValue={localStockQty}
-                  onLocalChange={setLocalStockQty}
-                  onDecrement={() => setStockQty((q) => Math.max(1, q - 1))}
-                  onIncrement={() => setStockQty((q) => Math.min(effectiveStock, q + 1))}
-                  onCommit={commitStockQty}
-                  onKeyDown={(e) => { if (e.key === 'Enter') commitStockQty(); if (e.key === 'Escape') setLocalStockQty(String(clampedStockQty)) }}
-                  max={effectiveStock} disabled={isPending}
-                />
-                <Button onClick={handleAddStock} isLoading={isPending} disabled={!userId} className="flex-1" size="lg">
-                  <ShoppingBag size={18} />
-                  Agregar al carrito
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* Pre-order section */}
+          {/* Unified purchase card */}
           {variantReady && (
-            <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 flex flex-col gap-3">
-              <div className="flex items-center gap-2 flex-wrap">
-                <Ship size={14} className="text-blue-500" />
-                <span className="text-sm font-medium text-gray-900">Pre-pedido</span>
-                <span className="text-xs text-gray-400">sin límite · llega con el próximo container</span>
-              </div>
+            <div className="rounded-xl border border-gray-200 bg-white p-4 flex flex-col gap-4">
+              {/* Segmented control — only shown when stock is available */}
+              {effectiveStock > 0 && (
+                <div className="flex bg-gray-100 rounded-lg p-1 gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setSource('stock')}
+                    className={cn(
+                      'flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-md text-sm font-medium transition-all',
+                      source === 'stock'
+                        ? 'bg-white shadow-sm text-gray-900'
+                        : 'text-gray-500 hover:text-gray-700',
+                    )}
+                  >
+                    <Warehouse size={13} />
+                    Desde stock
+                    <span className="text-xs font-normal opacity-60">({effectiveStock} u.)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSource('preorder')}
+                    className={cn(
+                      'flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-md text-sm font-medium transition-all',
+                      source === 'preorder'
+                        ? 'bg-white shadow-sm text-gray-900'
+                        : 'text-gray-500 hover:text-gray-700',
+                    )}
+                  >
+                    <Ship size={13} />
+                    Pre-pedido
+                  </button>
+                </div>
+              )}
+
+              {/* Source description */}
+              <p className="text-xs text-gray-400 -mt-1">
+                {source === 'stock'
+                  ? `Máx. ${effectiveStock} unidades · entrega inmediata`
+                  : 'Sin límite · llega con el próximo container'}
+              </p>
+
+              {/* Action row */}
               <div className="flex items-center gap-3">
-                <QtyControl
-                  value={preorderQty} localValue={localPreorderQty}
-                  onLocalChange={setLocalPreorderQty}
-                  onDecrement={() => setPreorderQty((q) => Math.max(1, q - 1))}
-                  onIncrement={() => setPreorderQty((q) => q + 1)}
-                  onCommit={commitPreorderQty}
-                  onKeyDown={(e) => { if (e.key === 'Enter') commitPreorderQty(); if (e.key === 'Escape') setLocalPreorderQty(String(preorderQty)) }}
-                  disabled={isPending}
-                />
-                <Button
-                  onClick={handleAddPreorder} isLoading={isPending} disabled={!userId}
-                  variant="outline"
-                  className="flex-1 border-blue-200 text-blue-600 hover:bg-blue-100"
-                  size="lg"
-                >
-                  <Ship size={18} />
-                  Pre-pedido
-                </Button>
+                {source === 'stock' ? (
+                  <>
+                    <QtyControl
+                      value={clampedStockQty} localValue={localStockQty}
+                      onLocalChange={setLocalStockQty}
+                      onDecrement={() => setStockQty((q) => Math.max(1, q - 1))}
+                      onIncrement={() => setStockQty((q) => Math.min(effectiveStock, q + 1))}
+                      onCommit={commitStockQty}
+                      onKeyDown={(e) => { if (e.key === 'Enter') commitStockQty(); if (e.key === 'Escape') setLocalStockQty(String(clampedStockQty)) }}
+                      max={effectiveStock} disabled={isPending}
+                    />
+                    <Button onClick={handleAddStock} isLoading={isPending} disabled={!userId} className="flex-1" size="lg">
+                      <ShoppingBag size={18} />
+                      Agregar al carrito
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <QtyControl
+                      value={preorderQty} localValue={localPreorderQty}
+                      onLocalChange={setLocalPreorderQty}
+                      onDecrement={() => setPreorderQty((q) => Math.max(1, q - 1))}
+                      onIncrement={() => setPreorderQty((q) => q + 1)}
+                      onCommit={commitPreorderQty}
+                      onKeyDown={(e) => { if (e.key === 'Enter') commitPreorderQty(); if (e.key === 'Escape') setLocalPreorderQty(String(preorderQty)) }}
+                      disabled={isPending}
+                    />
+                    <Button
+                      onClick={handleAddPreorder} isLoading={isPending} disabled={!userId}
+                      variant="outline" className="flex-1" size="lg"
+                    >
+                      <Ship size={18} />
+                      Pre-pedido
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           )}

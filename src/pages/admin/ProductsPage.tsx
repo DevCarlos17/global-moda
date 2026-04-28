@@ -28,6 +28,13 @@ function flattenCategoryTree(cats: CategoryWithChildren[], depth = 0): SelectOpt
   ])
 }
 
+// When a product has variants, the real stock is the sum of all variant stocks.
+// products.stock_quantity is NOT updated when variant stocks change via RPC.
+const getEffectiveStock = (p: ProductWithCategory): number =>
+  p.variants && p.variants.length > 0
+    ? p.variants.reduce((sum, v) => sum + (v.stock_quantity ?? 0), 0)
+    : p.stock_quantity
+
 // ─── Filter options ───────────────────────────────────────────────────────────
 
 const STATUS_OPTIONS: SelectOption[] = [
@@ -48,9 +55,10 @@ const productFilterFn = (product: ProductWithCategory, filters: Record<string, s
     return false
   if (filters.status === 'active' && !product.is_active) return false
   if (filters.status === 'inactive' && product.is_active) return false
-  if (filters.stock === 'in' && product.stock_quantity <= 0) return false
-  if (filters.stock === 'low' && (product.stock_quantity === 0 || product.stock_quantity > 5)) return false
-  if (filters.stock === 'out' && product.stock_quantity > 0) return false
+  const stock = getEffectiveStock(product)
+  if (filters.stock === 'in' && stock <= 0) return false
+  if (filters.stock === 'low' && (stock === 0 || stock > 5)) return false
+  if (filters.stock === 'out' && stock > 0) return false
   return true
 }
 
@@ -91,7 +99,7 @@ export function ProductsPage() {
     ...flattenCategoryTree(categoryTree),
   ]
 
-  const lowStockCount = products.filter((p) => p.is_active && p.stock_quantity <= 5).length
+  const lowStockCount = products.filter((p) => p.is_active && getEffectiveStock(p) <= 5).length
 
   const handleDelete = (e: React.MouseEvent, product: ProductWithCategory) => {
     e.stopPropagation()
@@ -100,12 +108,12 @@ export function ProductsPage() {
 
   const handleEdit = (e: React.MouseEvent, id: string) => {
     e.stopPropagation()
-    navigate(`/admin/products/${id}/edit`)
+    navigate(`/admin/inventory/${id}/edit`)
   }
 
   const handleAdjustStock = (e: React.MouseEvent, product: ProductWithCategory) => {
     e.stopPropagation()
-    setAdjustTarget({ id: product.id, name: product.name, sku: product.sku, stock_quantity: product.stock_quantity })
+    setAdjustTarget({ id: product.id, name: product.name, sku: product.sku, stock_quantity: getEffectiveStock(product) })
   }
 
   const columns: Column<ProductWithCategory>[] = [
@@ -151,7 +159,7 @@ export function ProductsPage() {
       key: 'stock_quantity',
       header: 'Stock',
       sortField: 'stock_quantity',
-      render: (product) => <StockCell qty={product.stock_quantity} />,
+      render: (product) => <StockCell qty={getEffectiveStock(product)} />,
     },
     {
       key: 'is_active',
@@ -229,7 +237,7 @@ export function ProductsPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-semibold text-gray-900">Productos</h1>
-        <Button onClick={() => navigate('/admin/products/new')} size="sm">
+        <Button onClick={() => navigate('/admin/inventory/new')} size="sm">
           <Plus size={16} />
           Nuevo producto
         </Button>
@@ -279,6 +287,7 @@ export function ProductsPage() {
       <StockAdjustModal
         isOpen={Boolean(adjustTarget)}
         onClose={() => setAdjustTarget(null)}
+        onSaved={refetch}
         product={adjustTarget}
       />
 

@@ -17,7 +17,7 @@ export function ProductPreviewModal({ product, onClose }: ProductPreviewModalPro
 
   const handleEdit = () => {
     onClose()
-    navigate(`/admin/products/${product!.id}/edit`)
+    navigate(`/admin/inventory/${product!.id}/edit`)
   }
 
   return (

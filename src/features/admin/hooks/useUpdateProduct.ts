@@ -19,8 +19,9 @@ export function useUpdateProduct() {
     onSuccess: (_data, vars) => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
       queryClient.invalidateQueries({ queryKey: ['products', vars.id] })
+      queryClient.invalidateQueries({ queryKey: ['inventory'] })
       toast.success('Producto actualizado')
-      navigate('/admin/products')
+      navigate('/admin/inventory')
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Error al actualizar el producto')

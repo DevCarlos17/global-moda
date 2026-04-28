@@ -19,6 +19,7 @@ interface ProductFilterSidebarProps {
   onSortChange: (v: SortOption) => void
   inStockOnly: boolean
   onInStockOnlyChange: (v: boolean) => void
+  collapsed?: boolean
 }
 
 export function ProductFilterSidebar({
@@ -30,6 +31,7 @@ export function ProductFilterSidebar({
   onSortChange,
   inStockOnly,
   onInStockOnlyChange,
+  collapsed = false,
 }: ProductFilterSidebarProps) {
   const hasFilters = !!search || !!selectedId || inStockOnly || sort !== 'name_asc'
 
@@ -41,7 +43,14 @@ export function ProductFilterSidebar({
   }
 
   return (
-    <aside className="hidden md:flex flex-col w-56 flex-shrink-0 border-r border-gray-200 sticky top-16 h-[calc(100dvh-4rem)] overflow-y-auto scrollbar-hide bg-white">
+    <aside
+      className={cn(
+        'hidden md:block flex-shrink-0 border-r border-gray-200 sticky top-16 h-[calc(100dvh-4rem)] bg-white overflow-hidden',
+        'transition-[width] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]',
+        collapsed ? 'w-0 border-r-0' : 'w-56',
+      )}
+    >
+      <div className="w-56 min-w-[14rem] flex flex-col h-full overflow-y-auto scrollbar-hide">
 
       {/* Header */}
       <div className="flex items-center justify-between px-4 pt-5 pb-3 border-b border-gray-100">
@@ -177,6 +186,7 @@ export function ProductFilterSidebar({
         <div className="mt-0.5">
           <CategoryTree selectedId={selectedId} onSelect={onSelect} />
         </div>
+      </div>
       </div>
     </aside>
   )

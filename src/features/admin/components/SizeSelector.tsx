@@ -28,8 +28,8 @@ export function SizeSelector({ selected, onChange }: SizeSelectorProps) {
             className={cn(
               'min-w-[44px] h-9 px-3 rounded-lg text-sm font-medium border transition-all',
               isSelected
-                ? 'bg-gold/20 border-gold text-gold'
-                : 'bg-white/5 border-white/10 text-white/50 hover:border-white/30 hover:text-white/80',
+                ? 'bg-gray-900 border-gray-900 text-white'
+                : 'bg-white border-gray-200 text-gray-500 hover:border-gray-400 hover:text-gray-800',
             )}
           >
             {size}
