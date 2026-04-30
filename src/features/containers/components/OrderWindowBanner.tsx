@@ -14,18 +14,18 @@ export function OrderWindowBanner() {
     : 'sin fecha límite definida'
 
   return (
-    <div className="flex items-center gap-3 px-4 py-2.5 bg-success/10 border-b border-success/20 text-sm">
-      <CalendarClock size={15} className="text-success flex-shrink-0" />
-      <p className="flex-1 text-white/80">
-        <span className="font-semibold text-success">Ventana de pedidos abierta</span>
+    <div className="flex items-center gap-3 px-4 py-2.5 bg-emerald-50 border-b border-emerald-200 text-sm">
+      <CalendarClock size={15} className="text-emerald-600 flex-shrink-0" />
+      <p className="flex-1 text-gray-700">
+        <span className="font-semibold text-emerald-700">Ventana de pedidos abierta</span>
         {' — '}
         Tus pedidos serán incluidos en el container{' '}
-        <span className="text-white font-medium">{container.container_number}</span>{' '}
+        <span className="text-gray-900 font-medium">{container.container_number}</span>{' '}
         ({deadlineText})
       </p>
       <button
         onClick={() => setDismissed(true)}
-        className="text-white/30 hover:text-white transition-colors flex-shrink-0"
+        className="text-gray-400 hover:text-gray-700 transition-colors flex-shrink-0"
         aria-label="Cerrar aviso"
       >
         <X size={14} />

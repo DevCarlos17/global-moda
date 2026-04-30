@@ -128,11 +128,13 @@ function buildMessage(order: Order): string {
     ``,
     `*Pedido:* ${order.order_number}`,
     `*Vendedor:* ${order.seller?.full_name ?? 'N/A'}`,
+    `*Email vendedor:* ${order.seller?.email ?? 'N/A'}`,
+    ``,
     `*Tienda:* ${order.store_name}`,
   ]
 
   if (order.store_address) lines.push(`*Dirección:* ${order.store_address}`)
-  if (order.store_contact) lines.push(`*Contacto:* ${order.store_contact}`)
+  if (order.store_contact) lines.push(`*Contacto tienda:* ${order.store_contact}`)
 
   lines.push(``, `*Productos:*`)
 

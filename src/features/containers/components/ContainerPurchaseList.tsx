@@ -56,7 +56,7 @@ export function ContainerPurchaseList({ containerId }: ContainerPurchaseListProp
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <span className="size-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+        <span className="size-5 border-2 border-gray-200 border-t-gray-600 rounded-full animate-spin" />
       </div>
     )
   }
@@ -64,9 +64,9 @@ export function ContainerPurchaseList({ containerId }: ContainerPurchaseListProp
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 py-12 text-center">
-        <Package size={32} className="text-white/20" />
-        <p className="text-sm text-white/40">No hay productos en este container</p>
-        <p className="text-xs text-white/25">
+        <Package size={32} className="text-gray-300" />
+        <p className="text-sm text-gray-500">No hay productos en este container</p>
+        <p className="text-xs text-gray-400">
           Agregá pedidos de vendedores o registrá una compra propia
         </p>
       </div>
@@ -82,19 +82,18 @@ export function ContainerPurchaseList({ containerId }: ContainerPurchaseListProp
       {/* Toolbar */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-4">
-          <p className="text-sm text-white/50">
-            <span className="text-white font-medium">{items.length}</span> productos ·{' '}
-            <span className="text-white font-medium">{totalUnits}</span> unidades
+          <p className="text-sm text-gray-500">
+            <span className="text-gray-900 font-medium">{items.length}</span> productos ·{' '}
+            <span className="text-gray-900 font-medium">{totalUnits}</span> unidades
           </p>
-          {/* Desglose rápido */}
           {totalSeller > 0 && (
-            <span className="flex items-center gap-1 text-xs text-white/40">
+            <span className="flex items-center gap-1 text-xs text-gray-400">
               <Users size={11} />
               {totalSeller} vendedores
             </span>
           )}
           {totalOwn > 0 && (
-            <span className="flex items-center gap-1 text-xs text-white/40">
+            <span className="flex items-center gap-1 text-xs text-gray-400">
               <Warehouse size={11} />
               {totalOwn} stock propio
             </span>
@@ -107,29 +106,29 @@ export function ContainerPurchaseList({ containerId }: ContainerPurchaseListProp
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-xl border border-white/10">
+      <div className="overflow-x-auto rounded-xl border border-gray-200">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-white/10 bg-white/[0.02]">
-              <th className="text-left px-4 py-3 text-[10px] font-semibold text-white/30 uppercase tracking-widest">
+            <tr className="border-b border-gray-100 bg-gray-50">
+              <th className="text-left px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">
                 Producto
               </th>
-              <th className="text-right px-4 py-3 text-[10px] font-semibold text-white/30 uppercase tracking-widest whitespace-nowrap">
+              <th className="text-right px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest whitespace-nowrap">
                 <span className="flex items-center justify-end gap-1">
                   <Users size={10} />
                   Vendedores
                 </span>
               </th>
-              <th className="text-right px-4 py-3 text-[10px] font-semibold text-white/30 uppercase tracking-widest whitespace-nowrap">
+              <th className="text-right px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest whitespace-nowrap">
                 <span className="flex items-center justify-end gap-1">
                   <Warehouse size={10} />
                   Stock propio
                 </span>
               </th>
-              <th className="text-right px-4 py-3 text-[10px] font-semibold text-white/30 uppercase tracking-widest">
+              <th className="text-right px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">
                 Total
               </th>
-              <th className="text-right px-4 py-3 text-[10px] font-semibold text-white/30 uppercase tracking-widest">
+              <th className="text-right px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">
                 Ajustado
               </th>
             </tr>
@@ -138,7 +137,7 @@ export function ContainerPurchaseList({ containerId }: ContainerPurchaseListProp
             {items.map((item) => (
               <tr
                 key={item.key}
-                className="border-b border-white/[0.06] hover:bg-white/[0.02] transition-colors"
+                className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
               >
                 {/* Producto */}
                 <td className="px-4 py-3">
@@ -147,17 +146,17 @@ export function ContainerPurchaseList({ containerId }: ContainerPurchaseListProp
                       <img
                         src={item.product.images[0]}
                         alt={item.product.name}
-                        className="size-9 rounded-lg object-cover bg-white/5 flex-shrink-0"
+                        className="size-9 rounded-lg object-cover bg-gray-100 flex-shrink-0"
                       />
                     ) : (
-                      <div className="size-9 rounded-lg bg-white/5 flex-shrink-0" />
+                      <div className="size-9 rounded-lg bg-gray-100 flex-shrink-0" />
                     )}
                     <div className="min-w-0">
-                      <p className="text-white font-medium truncate">{item.product.name}</p>
+                      <p className="text-gray-900 font-medium truncate">{item.product.name}</p>
                       <div className="flex items-center gap-1.5 mt-0.5">
-                        <p className="text-[10px] text-white/30">{item.product.sku}</p>
+                        <p className="text-[10px] text-gray-400">{item.product.sku}</p>
                         {item.variant_label && (
-                          <span className="px-1.5 py-0.5 rounded-md bg-white/[0.06] text-[10px] text-white/50 font-medium">
+                          <span className="px-1.5 py-0.5 rounded-md bg-gray-100 text-[10px] text-gray-500 font-medium">
                             {item.variant_label}
                           </span>
                         )}
@@ -169,31 +168,31 @@ export function ContainerPurchaseList({ containerId }: ContainerPurchaseListProp
                 {/* Vendedores */}
                 <td className="px-4 py-3 text-right">
                   {item.seller_quantity > 0 ? (
-                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-info/10 text-info text-xs font-semibold">
+                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold">
                       {item.seller_quantity}
                       {item.order_count > 0 && (
-                        <span className="text-info/50 text-[10px]">({item.order_count}p)</span>
+                        <span className="text-blue-400 text-[10px]">({item.order_count}p)</span>
                       )}
                     </div>
                   ) : (
-                    <span className="text-white/20 text-xs">—</span>
+                    <span className="text-gray-300 text-xs">—</span>
                   )}
                 </td>
 
                 {/* Stock propio */}
                 <td className="px-4 py-3 text-right">
                   {item.own_stock_quantity > 0 ? (
-                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-success/10 text-success text-xs font-semibold">
+                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 text-xs font-semibold">
                       {item.own_stock_quantity}
                     </div>
                   ) : (
-                    <span className="text-white/20 text-xs">—</span>
+                    <span className="text-gray-300 text-xs">—</span>
                   )}
                 </td>
 
                 {/* Total */}
                 <td className="px-4 py-3 text-right">
-                  <span className="text-white font-bold">{item.total_quantity}</span>
+                  <span className="text-gray-900 font-bold">{item.total_quantity}</span>
                 </td>
 
                 {/* Ajustado */}
@@ -205,7 +204,7 @@ export function ContainerPurchaseList({ containerId }: ContainerPurchaseListProp
                     onChange={(e) =>
                       setAdjustments((prev) => ({ ...prev, [item.key]: e.target.value }))
                     }
-                    className="w-20 h-8 bg-white/5 border border-white/10 rounded-lg px-2 text-sm text-right text-white focus:outline-none focus:ring-1 focus:border-white/40 focus:ring-white/15"
+                    className="w-20 h-8 bg-white border border-gray-200 rounded-lg px-2 text-sm text-right text-gray-900 focus:outline-none focus:ring-1 focus:border-gray-400 focus:ring-gray-100"
                   />
                 </td>
               </tr>

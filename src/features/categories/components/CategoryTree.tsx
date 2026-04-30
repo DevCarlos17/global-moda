@@ -24,8 +24,8 @@ function CategoryNode({ category, selectedId, onSelect, depth = 0 }: CategoryNod
           if (hasChildren) setExpanded((v) => !v)
         }}
         className={cn(
-          'flex items-center gap-2 w-full text-left px-3 py-2 rounded-lg text-sm transition-colors',
-          isSelected ? 'bg-white/10 text-white' : 'text-white/50 hover:text-white hover:bg-white/10',
+          'flex items-center gap-2 w-full text-left px-2 py-1.5 rounded-lg text-xs transition-colors',
+          isSelected ? 'bg-gray-100 text-gray-900' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50',
         )}
         style={{ paddingLeft: `${12 + depth * 16}px` }}
       >
